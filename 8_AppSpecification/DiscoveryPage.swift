@@ -60,6 +60,7 @@ struct DiscoveryPage: View {
                                     .fill(Color.black)
                                     .cornerRadius(15)
                                     .frame(maxWidth: 265, maxHeight: 265)
+                      
                                     .padding(.top, -165)
                             }
                             
