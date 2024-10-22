@@ -27,8 +27,8 @@ struct ContentView: View {
 
             // Second Tab (Bucketlist)
             VStack {
-                Text("Clipboard Page")
-                Spacer()
+                BucketlistPage()
+                //Spacer()
             }
             .tabItem {
                 Label("Bucketlist", systemImage: "checklist")
