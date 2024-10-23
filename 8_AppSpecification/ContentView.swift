@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var hideTabBar = false
+    
     init() {
             // Set the background color of the tab bar
             UITabBar.appearance().backgroundColor = UIColor(named: "myGreen")
@@ -20,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             // First Tab (Home)
-            DiscoveryPage()
+            DiscoveryPage(hideTabBar: $hideTabBar)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
