@@ -9,44 +9,44 @@ import SwiftUI
 
 struct DiscoveryPage: View {
     
-    @State private var locationImages = [["Fiji_1", "Fiji_2","Fiji_3", "Fiji_4" ],["kyoto_1", "kyoto_2", "kyoto_3"]]
-    @State private var locationName = ["Fiji, South Pacific Islands", "Kyoto, Japan"]
+    @State private var locationImages = [["Fiji_1", "Fiji_2","Fiji_3", "Fiji_4" ],["kyoto_1", "kyoto_2", "kyoto_3"], ["Auckland_1", "Auckland_2", "Auckland_3", "Auckland_4"]]
+    @State private var locationName = ["Fiji, South Pacific Islands", "Kyoto, Japan", "Auckland, New Zealand"
+]
     @State private var currentIndex = 0
         
     var body: some View {
-            NavigationStack{
-                VStack {
-                    // Top color strip with "Discovery Page" text
-                    Rectangle()
-                        .fill(Color("myTeal"))
-                        .frame(height: 125)
-                        .overlay(
-                            HStack{
-                                Text("DISCOVERY PAGE")
-                                    .font(.title2)
-                                    .bold()
+        NavigationStack{
+            VStack {
+                // Top color strip with "Discovery Page" text
+                Rectangle()
+                    .fill(Color("myTeal"))
+                    .frame(height: 125)
+                    .overlay(
+                        HStack{
+                            Text("DISCOVERY PAGE")
+                                .font(.title2)
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading)
+                            NavigationLink(destination: SearchLocationView()) {
+                                Image(systemName: "magnifyingglass")
+                                    .font(.title)
                                     .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.leading)
-                                Button(action: {
-                                    print("Search")
-                                }) {
-                                    Image(systemName: "magnifyingglass")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding(.leading)
-                                }
-                                NavigationLink(destination: FilterView()) {
-                                    Image(systemName: "gearshape")
-                                        .font(.title)
-                                        .foregroundColor(Color.white)
-                                        .padding(.trailing)
-
-                                }
                             }
+                            NavigationLink(destination: FilterView()) {
+                                Image(systemName: "gearshape")
+                                    .font(.title)
+                                    .foregroundColor(Color.white)
+                                    .padding(.trailing)
+                                
+                            }
+                        }
                             .padding(.top, 70)
-                        )
-                    // Main content area
+                    )
+                // Main content area
+                ZStack {
                     Rectangle()
                         .fill(Color("myBeige"))
                         .cornerRadius(50)
@@ -54,79 +54,76 @@ struct DiscoveryPage: View {
                         .padding(.horizontal, 20)
                         .padding(.top, 10)
                         .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
-                        .overlay(
+                        .padding(.top, -40)
+                    VStack {
+                        ZStack(alignment: .center) {
+                            Rectangle()
+                                .fill(Color.white)
+                                .cornerRadius(20)
+                                .frame(width: 300, height: 440)
+                                .padding(.horizontal, 15)
+                                .padding(.top, 50)
+                                .padding(40)
+                            
                             VStack {
-                                NavigationLink(destination: DetailPage(
-                                    images: locationImages[currentIndex],
-                                    locationName: locationName[currentIndex],
-                                    description: description[currentIndex]
-                                )
-                            ) {
-                                    ZStack(alignment: .center) {
-                                        Rectangle()
-                                            .fill(Color.white)
-                                            .cornerRadius(20)
-                                            .frame(width: 300, height: 440)
-                                            .padding(.horizontal, 15)
-                                            .padding(.top, 50)
-                                            .padding(40)
-                                        
-                                        VStack {
-                                            ZStack(alignment: .topLeading) {
-                                                Image(locationImages[currentIndex][0])
-                                                    .resizable()
-                                                    .cornerRadius(15)
-                                                    .frame(width: 275, height: 285)
-                                                VStack {
-                                                    Text(locationName[currentIndex])
-                                                        .foregroundColor(.white)
-                                                        .bold()
-                                                        .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
-                                                        .padding(.leading)
-                                                }
-                                                .padding(.top, 10)
-                                            }
-                                            .padding(.top, -75)
-                                            Text(description[currentIndex])
-                                                .frame(width: 255, height: 115)
-                                                .foregroundColor(Color.black)
-                                                .font(.system(size: 15))
-                                        }
-                                        .padding(.top, 120)
-                                        Spacer()
-                                        
-                                            
-                                        
-                                    }
-                                }
-                                
-                                Button(action: {
-                                    chooseRandomIndex()
-                                }) {
-                                    ZStack {
-                                        Rectangle()
-                                            .fill(Color("myBrown"))
-                                            .cornerRadius(10)
-                                            .frame(width: 275, height: 40)
-                                        Text("Next Destination")
+                                ZStack(alignment: .topLeading) {
+                                    NavigationLink(destination:
+                                                    DetailPage(
+                                                        images: locationImages[currentIndex],
+                                                        locationName: locationName[currentIndex],
+                                                        description: description[currentIndex],
+                                                        currentIndex: currentIndex
+                                                    )) {
+                                                        Image(locationImages[currentIndex][0])
+                                                            .resizable()
+                                                            .cornerRadius(15)
+                                                            .frame(width: 275, height: 285)
+                                                    }
+                                    VStack {
+                                        Text(locationName[currentIndex])
                                             .foregroundColor(.white)
                                             .bold()
+                                            .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
+                                            .padding(.leading)
                                     }
+                                    .padding(.top, 10)
                                 }
-                                .padding(.bottom, 95)
+                                .padding(.top, -75)
+                                Text(description[currentIndex])
+                                    .frame(width: 255, height: 115)
+                                    .foregroundColor(Color.black)
+                                    .font(.system(size: 15))
                             }
-                        )
+                            .padding(.top, 120)
+                        }
+                        .padding(.top, -50)
+                        
+                        Button(action: {
+                            chooseRandomIndex()
+                        }) {
+                            ZStack {
+                                Rectangle()
+                                    .fill(Color("myBrown"))
+                                    .cornerRadius(10)
+                                    .frame(width: 275, height: 40)
+                                Text("Next Destination")
+                                    .foregroundColor(.white)
+                                    .bold()
+                            }
+                        }
+                        .padding(.bottom, 95)
+                        
+                    }
                     
-                    Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .background(Color.white)
-                .ignoresSafeArea(edges: .top)
-               
- 
+                
+                Spacer()
             }
-
-        } // end of var body
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            //.background(Color.white)
+            .ignoresSafeArea(edges: .top)
+        }
+    } // end of var body
     
     func chooseRandomIndex() {
         currentIndex = (currentIndex + 1) % locationImages.count
@@ -135,7 +132,9 @@ struct DiscoveryPage: View {
     @State private var description = [
         "Fiji is a tropical paradise located in the South Pacific Ocean, consisting of over 330 islands, with about 110 inhabited. Known for its pristine beaches, turquoise waters, and vibrant coral reefs, Fiji is a popular destination for snorkeling, diving, and beach vacations. The islands boast a rich cultural heritage, blending indigenous Fijian traditions with Indian, European, and Chinese influences. Visitors can experience warm hospitality, partake in traditional kava ceremonies, and explore local villages to gain insight into the islanders' way of life. Fiji's lush rainforests, dramatic landscapes, and cascading waterfalls provide endless opportunities for adventure, from hiking to zip-lining. The capital city, Suva, offers a mix of modern amenities and cultural landmarks, such as the Fiji Museum and Thurston Gardens. ",
         
-        "Kyoto, Japan, is a city steeped in history and tradition, serving as the cultural heart of Japan for over a thousand years. Once the imperial capital, Kyoto is renowned for its beautifully preserved temples, shrines, and traditional wooden houses. The city is home to over 1,600 Buddhist temples and 400 Shinto shrines, including iconic landmarks like Kinkaku-ji (the Golden Pavilion), Fushimi Inari-taisha, and Kiyomizu-dera. Visitors can explore serene Zen gardens, tea houses, and ancient palaces that offer a glimpse into Japan's rich spiritual and cultural heritage.Kyoto is also famous for its seasonal beauty, with cherry blossoms in the spring and vibrant autumn leaves attracting travelers from around the world."
+        "Kyoto, Japan, is a city steeped in history and tradition, serving as the cultural heart of Japan for over a thousand years. Once the imperial capital, Kyoto is renowned for its beautifully preserved temples, shrines, and traditional wooden houses. The city is home to over 1,600 Buddhist temples and 400 Shinto shrines, including iconic landmarks like Kinkaku-ji (the Golden Pavilion), Fushimi Inari-taisha, and Kiyomizu-dera. Visitors can explore serene Zen gardens, tea houses, and ancient palaces that offer a glimpse into Japan's rich spiritual and cultural heritage.Kyoto is also famous for its seasonal beauty, with cherry blossoms in the spring and vibrant autumn leaves attracting travelers from around the world.",
+        
+        "A vibrant, diverse city located on the North Island, known as the 'City of Sails' due to its numerous harbors and love for boating. Surrounded by stunning natural landscapes, Auckland boasts both urban sophistication and breathtaking outdoor beauty. The city is built on a volcanic field, featuring picturesque hills and ancient cones, such as Mount Eden and Rangitoto Island, offering spectacular views of the skyline and surrounding waters. Renowned for its multicultural atmosphere, with influences from Māori, Pacific Islander, Asian, and European cultures, creating a rich tapestry of traditions, art, and cuisine."
     
     ]
 }

@@ -1,13 +1,10 @@
-//
-//  GuideView.swift
-//  8_AppSpecification
-//
-//  Created by user264779 on 10/22/24.
-//
-
 import SwiftUI
 
 struct GuideView: View {
+    
+    @State var locationName: String
+    @State var currentIndex: Int
+    
     var body: some View {
         VStack {
             Rectangle()
@@ -26,13 +23,13 @@ struct GuideView: View {
                 
                 // Scrollable text inside the rectangle
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 10){
+                    VStack(alignment: .leading, spacing: 10) {
                         
-                        Text("Fiji, South Pacific Islands")
+                        Text(locationName)
                             .foregroundColor(Color("myTeal"))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .font(.custom("Roboto-Thin", size: 24))
-                            .padding(.top,30)
+                            .padding(.top, 30)
 
                         Text("TRAVELER'S GUIDE")
                             .foregroundColor(Color("myTeal"))
@@ -40,7 +37,7 @@ struct GuideView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                         
                         Divider()
-                            .frame(width: 200, height: 2)  // Set custom width and height
+                            .frame(width: 200, height: 2)
                             .background(Color("myGreen"))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding()
@@ -52,17 +49,21 @@ struct GuideView: View {
                         // Do's Section
                         Text("Do’s:")
                             .font(.headline)
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Smile: Fijians are known for their warmth and friendliness, and smiling is considered a sign of respect and hospitality.")
+                        ForEach(guideBodyLanguageDo[currentIndex], id: \.self) { doTip in
+                            HStack(alignment: .top) {
+                                Text("•")
+                                Text(doTip)
+                            }
                         }
                         
                         // Don'ts Section
                         Text("Don’ts:")
                             .font(.headline)
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Pointing: Avoid pointing at people with your finger. Instead, use your whole hand to gesture.")
+                        ForEach(guideBodyLanguageDont[currentIndex], id: \.self) { dontTip in
+                            HStack(alignment: .top) {
+                                Text("•")
+                                Text(dontTip)
+                            }
                         }
                         
                         // Common Words & Phrases Section
@@ -70,13 +71,11 @@ struct GuideView: View {
                             .font(.title2)
                             .padding(.top, 10)
                         
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Bula!: The universal Fijian greeting, meaning \"Hello!\" and often used with a smile.")
-                        }
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Vinaka: Means \"Thank you.\"")
+                        ForEach(commonPhrases[currentIndex], id: \.0) { phrase in
+                            HStack(alignment: .top) {
+                                Text("•")
+                                Text(phrase.0 + ": " + phrase.1)
+                            }
                         }
                         
                         // Electrical Plug & Outlet Info Section
@@ -84,17 +83,11 @@ struct GuideView: View {
                             .font(.title2)
                             .padding(.top, 10)
                         
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Plug Type: Fiji uses plug types I (three flat pins in a triangular configuration).")
-                        }
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Voltage: The standard voltage is 240V, and the frequency is 50Hz.")
-                        }
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Adapter Needed?: Travelers from most countries (like the US, UK, and Europe) will need an adapter.")
+                        ForEach(electricalInfo[currentIndex], id: \.0) { info in
+                            HStack(alignment: .top) {
+                                Text("•")
+                                Text(info.0 + ": " + info.1)
+                            }
                         }
                         
                         // Cultural Dos & Don’ts Section
@@ -102,9 +95,11 @@ struct GuideView: View {
                             .font(.title2)
                             .padding(.top, 10)
                         
-                        HStack(alignment: .top) {
-                            Text("•")
-                            Text("Don’t wear hats in villages: In Fijian culture, hats are reserved for chiefs, so wearing one in a village is considered disrespectful.")
+                        ForEach(culturalInfo[currentIndex], id: \.0) { cultureTip in
+                            HStack(alignment: .top) {
+                                Text("•")
+                                Text(cultureTip.0 + ": " + cultureTip.1)
+                            }
                         }
                     }
                     
@@ -118,8 +113,58 @@ struct GuideView: View {
         } // VStack
         .background(Color("myBeige"))
     }
+    
+    @State private var guideBodyLanguageDo: [[String]] = [
+        // Index 0: Fiji
+        ["Smile: Fijians are known for their warmth and friendliness, and smiling is considered a sign of respect and hospitality."],
+        // Index 1: Placeholder for another location
+        ["None"],
+        // Index 2: Placeholder for another location
+        ["None"]
+    ]
+    
+    @State private var guideBodyLanguageDont: [[String]] = [
+        // Index 0: Fiji
+        ["Avoid pointing at people with your finger. Instead, use your whole hand to gesture."],
+        // Index 1: Placeholder
+        ["None"],
+        // Index 2: Placeholder
+        ["None"]
+    ]
+
+    @State private var commonPhrases: [[(String, String)]] = [
+        // Index 0: Fiji
+        [("Bula!", "The universal Fijian greeting, meaning 'Hello!' and often used with a smile."),
+         ("Vinaka", "Means 'Thank you.'")],
+        // Index 1: Placeholder
+        [("Phrase", "None")],
+        // Index 2: Placeholder
+        [("Phrase", "None")]
+    ]
+
+    @State private var electricalInfo: [[(String, String)]] = [
+        // Index 0: Fiji
+        [("Plug Type", "Fiji uses plug types I (three flat pins in a triangular configuration)."),
+         ("Voltage", "The standard voltage is 240V, and the frequency is 50Hz."),
+         ("Adapter Needed?", "Travelers from most countries (like the US, UK, and Europe) will need an adapter.")],
+        // Index 1: Placeholder
+        [("Plug Type", "None")],
+        // Index 2: Placeholder
+        [("Plug Type", "None")]
+    ]
+
+    @State private var culturalInfo: [[(String, String)]] = [
+        // Index 0: Fiji
+        [("Don't", "Wear hats in villages: In Fijian culture, hats are reserved for chiefs, so wearing one in a village is considered disrespectful.")],
+        // Index 1: Placeholder
+        [("Don't", "None")],
+        // Index 2: Placeholder
+        [("Don't", "None")]
+    ]
 }
 
 #Preview {
-    GuideView()
+    GuideView(
+        locationName: "Fiji, South Pacific Islands", currentIndex: 0
+    )
 }

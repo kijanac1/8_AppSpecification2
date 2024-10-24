@@ -115,6 +115,25 @@ struct FilterView: View {
                         .sheet(isPresented: $showingActivitiesSelection) {
                             SelectionView(title: "Select Activity", options: activities, selectedOption: $selectedActivities)
                         }
+                        .padding(.bottom, 50)
+                        
+                        
+                        Button(action: {
+                            selectedRegion = "None"
+                            selectedClimate = "None"
+                            selectedAccessibility = "None"
+                            selectedActivities = "None"
+                        }) {
+                            ZStack {
+                                Rectangle()
+                                    .fill(Color("myBrown"))
+                                    .cornerRadius(10)
+                                    .frame(width: 175, height: 40)
+                                Text("Reset Filters")
+                                    .foregroundColor(.white)
+                                    .bold()
+                            }
+                        }
                         
                     }
                     .padding(.horizontal, 20)  // Adjust the spacing within the beige box
