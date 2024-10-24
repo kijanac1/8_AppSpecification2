@@ -97,7 +97,7 @@ struct CustomLocationView: View {
                             Button(action: {
                                 handleSubmit()
                             }) {
-                                Text("Submit")
+                                Text("Done")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .padding(.horizontal)
