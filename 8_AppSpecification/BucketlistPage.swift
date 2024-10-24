@@ -84,6 +84,7 @@ struct BucketlistPage: View {
                                                             .foregroundColor(.black)
                                                             .padding(.leading, 50)
                                                             .padding(.top, -20)
+                                                            .frame(width: 225, alignment: .leading)
 
                                                     if isEditing {
                                                         HStack(spacing: 15) {
