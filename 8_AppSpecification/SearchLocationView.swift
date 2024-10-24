@@ -31,21 +31,29 @@ struct SearchLocationView: View {
 
             VStack {
                 HStack {
-                    TextField("Search location", text: $searchText)
-                        .padding(10)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                        ZStack {
 
-                    Button(action: {
-                        // Optionally trigger search logic
-                    }) {
-                        Image(systemName: "magnifyingglass")
-                            .font(.title2)
-                            .foregroundColor(Color("myGreen"))
-                            .padding(.trailing, 10)
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.white)
+                                .frame(height: 40)
+                            
+                            HStack {
+                                TextField("Search location", text: $searchText)
+                                    .padding(.leading, 20)
+                                
+                                Spacer()
+                                Button(action: {
+                                    // Optionally trigger search logic
+                                }) {
+                                    Image(systemName: "magnifyingglass")
+                                        .font(.title2)
+                                        .foregroundColor(Color("myGreen"))
+                                        .padding(.trailing, 10)
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
                     }
-                }
                 .padding(.top, -40)
 
                 ScrollView {
