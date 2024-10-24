@@ -8,7 +8,13 @@ import SwiftUI
 
 struct BucketlistPage: View {
     @State private var isEditing: Bool = false
-    @State private var locations: [String] = ["Location 1", "Location 2", "Location 3", "Location 4", "Location 5"]
+    @State private var locations: [Location] = [
+        Location(city: "Fiji", country: "South Pacific Islands", description: "Beautiful city 1", image: UIImage(named: "Fiji_1")),
+        Location(city: "Leavenworth", country: "USA", description: "Beautiful city 2", image: UIImage(named: "leavenworth1")),
+        Location(city: "Greece", country: "Italy", description: "Beautiful city 3", image: UIImage(named: "greece1")),
+        Location(city: "Montego Bay", country: "Jamaica", description: "Beautiful city 4", image: UIImage(named: "montegobay1")),
+        Location(city: "Santo Domingo", country: "Dominican Republic", description: "Beautiful city 4", image: UIImage(named:"santodomingo1"))
+        ]
     @State private var showAlert = false
     @State private var selectedLocationIndex: Int?
     @State private var showAddLocationSheet = false
@@ -64,12 +70,17 @@ struct BucketlistPage: View {
                                                         .padding(.top, -20)
                                                         .padding(20)
                                                         .shadow(color: Color.gray.opacity(0.4), radius: 10, x: 0, y: 5)
-                                                    Rectangle()
-                                                        .fill(Color.black)
-                                                        .cornerRadius(15)
-                                                        .frame(width: 65, height: 65)
-                                                        .padding(.leading, -161)
-                                                        .padding(.top, -20)
+                                                    Image(uiImage: locations[locIndex].image ?? UIImage())
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 80, height: 80)
+                                                            .cornerRadius(15)
+                                                            .padding(.leading, -161)
+                                                            .padding(.top, -20)
+                                                        Text((locations[locIndex].city))
+                                                            .font(.headline)
+                                                            .foregroundColor(.black)
+                                                            .padding(.leading, 50)
 
                                                     if isEditing {
                                                         HStack(spacing: 15) {
@@ -152,7 +163,10 @@ struct BucketlistPage: View {
                 )
             }
             .navigationDestination(isPresented: $showCustomLocationView) {
-                CustomLocationView(isBucketListPage: true)
+                CustomLocationView(targetPage: .bucketlist, addLocationToBucketList: { newLocation in
+                    locations.append(newLocation)
+                    showCustomLocationView = false
+                })
             }
             .navigationDestination(isPresented: $showSearchLocationView) {
                 SearchLocationView()

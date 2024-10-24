@@ -5,6 +5,11 @@
 //
 import SwiftUI
 
+enum TargetPage {
+    case bucketlist
+    case completed
+}
+
 struct CustomLocationView: View {
     @State private var city: String = ""
     @State private var country: String = ""
@@ -13,7 +18,9 @@ struct CustomLocationView: View {
     @State private var isPickerPresented: Bool = false
     @State private var isImageUploaded: Bool = false
     
-    var isBucketListPage: Bool
+    var targetPage: TargetPage
+    var addLocationToBucketList: ((Location) -> Void)?
+    var addLocationToCompleted: ((Location) -> Void)?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -110,14 +117,19 @@ struct CustomLocationView: View {
     }
     
     private func handleSubmit() {
-        if isBucketListPage {
-            print("Location added to Bucket List")
-        } else {
-            print("Location added to Completed Trips")
+        guard !city.isEmpty, !country.isEmpty else{
+            return
+        }
+        let newLocation = Location(city: city, country: country, description: description, image: selectedImage)
+        switch targetPage{
+        case .bucketlist:
+            addLocationToBucketList?(newLocation)
+        case .completed:
+            addLocationToCompleted?(newLocation)
         }
     }
 }
 
 #Preview {
-    CustomLocationView(isBucketListPage: true)
+    CustomLocationView(targetPage: .bucketlist)
 }
