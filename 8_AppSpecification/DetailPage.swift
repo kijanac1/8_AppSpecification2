@@ -9,9 +9,10 @@ import SwiftUI
 
 struct DetailPage: View {
     
-    @Binding var hideTabBar: Bool
-    @State private var fijiImages = ["Fiji_3", "Fiji_4","Fiji_1", "Fiji_2", ]
-    @State private var currentImageIndex = 0  // Track the current image index
+    @State var images: [String]  // List of images
+    @State var locationName: String  // Location name
+    @State var description: String  // Location description
+    @State private var currentImageIndex = 0
     
     var body: some View {
         VStack {
@@ -19,7 +20,7 @@ struct DetailPage: View {
                 .fill(Color("myTeal"))
                 .frame(height: 125)
             
-            Text("Fiji, South Pacific Islands")
+            Text(locationName)
                 .foregroundColor(Color("myGreen"))
                 .font(.system(size: 20))
                 .padding()
@@ -27,7 +28,7 @@ struct DetailPage: View {
             
             GeometryReader { geometry in
                 ZStack{
-                    Image(fijiImages[currentImageIndex])
+                    Image(images[currentImageIndex])
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width:  UIScreen.main.bounds.width+2, height: 300)
@@ -48,7 +49,7 @@ struct DetailPage: View {
                                     .padding(.bottom, -10)
                                     .foregroundColor(Color("myTeal"))
                                     .bold()
-                                Text("Fiji is a tropical paradise located in the South Pacific Ocean, consisting of over 330 islands, with about 110 inhabited. Known for its pristine beaches, turquoise waters, and vibrant coral reefs, Fiji is a popular destination for snorkeling, diving, and beach vacations. The islands boast a rich cultural heritage, blending indigenous Fijian traditions with Indian, European, and Chinese influences. Visitors can experience warm hospitality, partake in traditional kava ceremonies, and explore local villages to gain insight into the islanders' way of life. Fiji's lush rainforests, dramatic landscapes, and cascading waterfalls provide endless opportunities for adventure, from hiking to zip-lining. The capital city, Suva, offers a mix of modern amenities and cultural landmarks, such as the Fiji Museum and Thurston Gardens. Whether ")
+                                Text(description)
                                     .padding()
                             }
                             .frame(width: 350, height: 280)
@@ -78,7 +79,7 @@ struct DetailPage: View {
                     
                     Button(action: {
                         // Increment the current image index to show the next image
-                        currentImageIndex = (currentImageIndex + 1) % fijiImages.count
+                        currentImageIndex = (currentImageIndex + 1) % images.count
                     }) {
                         Image(systemName: "chevron.right")  // Chevron right button
                             .font(.system(size: 40))
@@ -100,5 +101,5 @@ struct DetailPage: View {
 }
 
 #Preview {
-    DetailPage(hideTabBar: .constant(false))
+    DetailPage(images: ["Fiji_1", "Fiji_2"], locationName: "Fiji, South Pacific Islands", description: "Fiji is a tropical paradise located in the South Pacific Ocean, consisting of over 330 islands...")
 }

@@ -9,46 +9,36 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var hideTabBar = false
-    
     init() {
-            // Set the background color of the tab bar
-            UITabBar.appearance().backgroundColor = UIColor(named: "myGreen")
-            
-            // Set the color of the unselected tab bar items
-            UITabBar.appearance().unselectedItemTintColor = UIColor(named: "myTeal")
-        }
+        // Set the background color of the tab bar
+        UITabBar.appearance().backgroundColor = UIColor(named: "myGreen")
+        UITabBar.appearance().unselectedItemTintColor = UIColor(named: "myTeal")
+    }
     
     var body: some View {
-        TabView {
+        TabView() {
             // First Tab (Home)
-            DiscoveryPage(hideTabBar: $hideTabBar)
+            DiscoveryPage()
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
 
             // Second Tab (Bucketlist)
-            VStack {
-                BucketlistPage()
-                //Spacer()
-            }
-            .tabItem {
-                Label("Bucketlist", systemImage: "checklist")
-            }
+            BucketlistPage()
+                .tabItem {
+                    Label("Bucketlist", systemImage: "checklist")
+                }
 
             // Third Tab (Completed Trips)
-            VStack {
-                Text("Suitcase Page")
-                Spacer()
-            }
-            .tabItem {
-                Label("Trips", systemImage: "suitcase")
-            }
-
+            CompletedPage()
+                .tabItem {
+                    Label("Trips", systemImage: "suitcase")
+                }
         }
         .accentColor(Color("myBeige"))
     }
 }
+
 
 
 #Preview {

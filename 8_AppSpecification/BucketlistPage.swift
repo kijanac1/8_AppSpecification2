@@ -72,15 +72,18 @@ struct BucketlistPage: View {
                                                         .shadow(color: Color.gray.opacity(0.4), radius: 10, x: 0, y: 5)
                                                     Image(uiImage: locations[locIndex].image ?? UIImage())
                                                             .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 80, height: 80)
+                                                            .aspectRatio(contentMode: .fill)
+                                                            .frame(width: 70, height: 70)
+                                                            .clipped()
                                                             .cornerRadius(15)
                                                             .padding(.leading, -161)
                                                             .padding(.top, -20)
+                                                            
                                                         Text((locations[locIndex].city))
                                                             .font(.headline)
                                                             .foregroundColor(.black)
                                                             .padding(.leading, 50)
+                                                            .padding(.top, -20)
 
                                                     if isEditing {
                                                         HStack(spacing: 15) {
