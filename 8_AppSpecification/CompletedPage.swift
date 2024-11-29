@@ -131,7 +131,7 @@ struct CompletedPage: View {
                         .frame(width: 40, height: 40)
                         .foregroundColor(Color("myBrown"))
 
-                    Text("\(travelData.completedTrips.count)/\(travelData.locationNames.count) Completed Trips")
+                    Text("\(travelData.completedTrips.count)/\(travelData.completedTrips.count + travelData.bucketList.count) Trips")
                         .font(.body)
                         .foregroundColor(Color("myBrown"))
                         .bold()

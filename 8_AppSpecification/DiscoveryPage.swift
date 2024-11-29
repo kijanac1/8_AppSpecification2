@@ -84,6 +84,8 @@ struct DiscoveryPage: View {
                                             .bold()
                                             .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
                                             .padding(.leading)
+                                            .frame(width: 250, alignment: .leading)
+                                            .lineLimit(2)
                                     }
                                     .padding(.top, 10)
                                 }
