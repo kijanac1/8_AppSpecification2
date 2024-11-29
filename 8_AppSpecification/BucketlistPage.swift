@@ -177,9 +177,6 @@ struct BucketlistPage: View {
                     showCustomLocationView = false
                 })
             }
-            .navigationDestination(isPresented: $showSearchLocationView) {
-                SearchLocationView()
-            }
         }
     }
 }

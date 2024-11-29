@@ -20,7 +20,8 @@ class TravelData: ObservableObject {
         ["leavenworth1"],
         ["greece1"],
         ["montegobay1"],
-        ["santodomingo1"]
+        ["santodomingo1"],
+        ["tokyo_1"]
     ]
     
     @Published var locationNames: [String] = [
@@ -35,7 +36,9 @@ class TravelData: ObservableObject {
         "Leavenworth, WA, USA",
         "Greece, Italy",
         "Montego Bay, Jamaica",
-        "Santo Domingo, Dominican Republic"
+        "Santo Domingo, Dominican Republic",
+        "Tokyo, Japan"
+        
     ]
     
     @Published var completedTrips: [Int] = [3, 4, 5, 6, 7]
@@ -55,6 +58,6 @@ class TravelData: ObservableObject {
         "Leavenworth, WA, USA, is a charming Bavarian-style village nestled in the Cascade Mountains. Known for its alpine charm, Leavenworth offers a range of outdoor activities and cultural festivals, attracting visitors year-round for skiing, hiking, and its famous Oktoberfest.",
         "Greece, Italy, boasts a breathtaking coastline, vibrant culture, and rich history. From ancient ruins to picturesque beaches, Greece is a destination that combines relaxation and exploration, with delicious Mediterranean cuisine to match.",
         "Montego Bay, Jamaica, is a tropical paradise known for its stunning beaches, vibrant reggae music, and welcoming culture. Visitors can explore coral reefs, lush rainforests, and enjoy the lively nightlife of this Caribbean gem.",
-        "Santo Domingo, Dominican Republic, is the oldest European settlement in the Americas, offering a rich blend of history, culture, and vibrant city life. From the historic Zona Colonial to its bustling modern neighborhoods, Santo Domingo is a unique Caribbean destination."
-    ]
-}
+        "Santo Domingo, Dominican Republic, is the oldest European settlement in the Americas, offering a rich blend of history, culture, and vibrant city life. From the historic Zona Colonial to its bustling modern neighborhoods, Santo Domingo is a unique Caribbean destination.",
+        "Tokyo, Japan, is a bustling metropolis blending modern technology and ancient traditions. Famous for its vibrant neighborhoods like Shibuya and Harajuku, Tokyo also boasts serene temples, beautiful gardens, and world-class cuisine."
+    ]}
