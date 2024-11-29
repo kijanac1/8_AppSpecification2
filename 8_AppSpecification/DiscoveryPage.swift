@@ -9,9 +9,7 @@ import SwiftUI
 
 struct DiscoveryPage: View {
     
-    @State private var locationImages = [["Fiji_1", "Fiji_2","Fiji_3", "Fiji_4" ],["kyoto_1", "kyoto_2", "kyoto_3"], ["Auckland_1", "Auckland_2", "Auckland_3", "Auckland_4"]]
-    @State private var locationName = ["Fiji, South Pacific Islands", "Kyoto, Japan", "Auckland, New Zealand"
-]
+    @EnvironmentObject var travelData: TravelData
     @State private var currentIndex = 0
         
     var body: some View {
@@ -69,18 +67,19 @@ struct DiscoveryPage: View {
                                 ZStack(alignment: .topLeading) {
                                     NavigationLink(destination:
                                                     DetailPage(
-                                                        images: locationImages[currentIndex],
-                                                        locationName: locationName[currentIndex],
-                                                        description: description[currentIndex],
+                                                        images:
+                                                            travelData.locationImages[currentIndex],
+                                                        locationName: travelData.locationNames[currentIndex],
+                                                        description: travelData.descriptions[currentIndex],
                                                         currentIndex: currentIndex
                                                     )) {
-                                                        Image(locationImages[currentIndex][0])
+                                                        Image(travelData.locationImages[currentIndex][0])
                                                             .resizable()
                                                             .cornerRadius(15)
                                                             .frame(width: 275, height: 285)
                                                     }
                                     VStack {
-                                        Text(locationName[currentIndex])
+                                        Text(travelData.locationNames[currentIndex])
                                             .foregroundColor(.white)
                                             .bold()
                                             .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
@@ -89,7 +88,7 @@ struct DiscoveryPage: View {
                                     .padding(.top, 10)
                                 }
                                 .padding(.top, -75)
-                                Text(description[currentIndex])
+                                Text(travelData.descriptions[currentIndex])
                                     .frame(width: 255, height: 115)
                                     .foregroundColor(Color.black)
                                     .font(.system(size: 15))
@@ -99,7 +98,7 @@ struct DiscoveryPage: View {
                         .padding(.top, -50)
                         
                         Button(action: {
-                            chooseRandomIndex()
+                            currentIndex = (currentIndex + 1) % travelData.locationImages.count
                         }) {
                             ZStack {
                                 Rectangle()
@@ -124,21 +123,9 @@ struct DiscoveryPage: View {
             .ignoresSafeArea(edges: .top)
         }
     } // end of var body
-    
-    func chooseRandomIndex() {
-        currentIndex = (currentIndex + 1) % locationImages.count
-    }
-    
-    @State private var description = [
-        "Fiji is a tropical paradise located in the South Pacific Ocean, consisting of over 330 islands, with about 110 inhabited. Known for its pristine beaches, turquoise waters, and vibrant coral reefs, Fiji is a popular destination for snorkeling, diving, and beach vacations. The islands boast a rich cultural heritage, blending indigenous Fijian traditions with Indian, European, and Chinese influences. Visitors can experience warm hospitality, partake in traditional kava ceremonies, and explore local villages to gain insight into the islanders' way of life. Fiji's lush rainforests, dramatic landscapes, and cascading waterfalls provide endless opportunities for adventure, from hiking to zip-lining. The capital city, Suva, offers a mix of modern amenities and cultural landmarks, such as the Fiji Museum and Thurston Gardens. ",
-        
-        "Kyoto, Japan, is a city steeped in history and tradition, serving as the cultural heart of Japan for over a thousand years. Once the imperial capital, Kyoto is renowned for its beautifully preserved temples, shrines, and traditional wooden houses. The city is home to over 1,600 Buddhist temples and 400 Shinto shrines, including iconic landmarks like Kinkaku-ji (the Golden Pavilion), Fushimi Inari-taisha, and Kiyomizu-dera. Visitors can explore serene Zen gardens, tea houses, and ancient palaces that offer a glimpse into Japan's rich spiritual and cultural heritage.Kyoto is also famous for its seasonal beauty, with cherry blossoms in the spring and vibrant autumn leaves attracting travelers from around the world.",
-        
-        "A vibrant, diverse city located on the North Island, known as the 'City of Sails' due to its numerous harbors and love for boating. Surrounded by stunning natural landscapes, Auckland boasts both urban sophistication and breathtaking outdoor beauty. The city is built on a volcanic field, featuring picturesque hills and ancient cones, such as Mount Eden and Rangitoto Island, offering spectacular views of the skyline and surrounding waters. Renowned for its multicultural atmosphere, with influences from Māori, Pacific Islander, Asian, and European cultures, creating a rich tapestry of traditions, art, and cuisine."
-    
-    ]
 }
 
 #Preview {
     DiscoveryPage()
+        .environmentObject(TravelData())
 }

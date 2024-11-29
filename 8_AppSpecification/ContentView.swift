@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @StateObject private var travelData = TravelData()
+    
     init() {
         // Set the background color of the tab bar
         UITabBar.appearance().backgroundColor = UIColor(named: "myGreen")
@@ -17,20 +19,23 @@ struct ContentView: View {
     
     var body: some View {
         TabView() {
-            // First Tab (Home)
+            // (Home tab)
             DiscoveryPage()
+                .environmentObject(travelData)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
-
-            // Second Tab (Bucketlist)
+            
+            // (Bucketlist tab)
             BucketlistPage()
+                .environmentObject(travelData)
                 .tabItem {
                     Label("Bucketlist", systemImage: "checklist")
                 }
-
-            // Third Tab (Completed Trips)
+            
+            // (Completed Trips)
             CompletedPage()
+                .environmentObject(travelData)
                 .tabItem {
                     Label("Trips", systemImage: "suitcase")
                 }
