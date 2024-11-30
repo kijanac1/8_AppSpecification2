@@ -106,13 +106,7 @@ struct DiscoveryPage: View {
                                 }
                                 .padding(.top, -50)
                                 Button(action: {
-                                    withAnimation {
-                                        swipeOffset = -UIScreen.main.bounds.width // Animate ZStack swiping to the left
-                                    }
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // Wait for animation to complete
-                                        currentIndex = (currentIndex + 1) % travelData.locationImages.count // Update to next index
-                                        swipeOffset = 0 // Reset offset for the next animation
-                                    }
+                                    // no action
                                 }){
                                     ZStack {
                                         Rectangle()
@@ -128,7 +122,7 @@ struct DiscoveryPage: View {
 
                             }
                         }
-                        .offset(x: swipeOffset > 0 ? -UIScreen.main.bounds.width : 0) // Keeps next location static until swipe begins
+                        //.offset(x: swipeOffset > 0 ? -UIScreen.main.bounds.width : 0) // Keeps next location static until swipe begins
                         
                         // Existing current location ZStack
                         ZStack {
@@ -187,12 +181,18 @@ struct DiscoveryPage: View {
                                 .padding(.top, -50)
                                 
                                 Button(action: {
-                                    withAnimation {
-                                        swipeOffset = -UIScreen.main.bounds.width // Animate ZStack swiping to the left
+                                    // Animate the transition to the left
+                                    withAnimation(.easeOut(duration: 0.3)) {
+                                        swipeOffset = -UIScreen.main.bounds.width
                                     }
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // Wait for animation to complete
-                                        currentIndex = (currentIndex + 1) % travelData.locationImages.count // Update to next index
-                                        swipeOffset = 0 // Reset offset for the next animation
+                                    // After the animation completes, update the index and reset swipeOffset
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        // Ensure swipeOffset is reset after index is updated
+                                        currentIndex = (currentIndex + 1) % travelData.locationImages.count
+                                        swipeOffset = UIScreen.main.bounds.width // Pre-position for seamless transition
+                                        withAnimation(.easeOut(duration: 0.1)) {
+                                            swipeOffset = 0 // Slide new card into position
+                                        }
                                     }
                                 }){
                                     ZStack {
@@ -216,24 +216,24 @@ struct DiscoveryPage: View {
                                 }
                                 .onEnded { value in
                                     if value.translation.width < -50 { // Swipe left
-                                        withAnimation {
-                                            swipeOffset = -UIScreen.main.bounds.width // Move the ZStack off-screen to the left
+                                        withAnimation(.easeOut(duration: 0.25)) { // Smooth animation to left
+                                            swipeOffset = -UIScreen.main.bounds.width
                                         }
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // Reset and update index after animation
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { // Match animation duration
                                             currentIndex = (currentIndex + 1) % travelData.locationImages.count
-                                            swipeOffset = 0 // Reset offset for the next swipe
+                                            swipeOffset = 0
                                         }
                                     } else if value.translation.width > 50 { // Swipe right
-                                        withAnimation {
-                                            swipeOffset = UIScreen.main.bounds.width // Move the ZStack off-screen to the right
+                                        withAnimation(.easeOut(duration: 0.25)) { // Smooth animation to right
+                                            swipeOffset = UIScreen.main.bounds.width
                                         }
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // Reset and update index after animation
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                                             currentIndex = (currentIndex - 1 + travelData.locationImages.count) % travelData.locationImages.count
-                                            swipeOffset = 0 // Reset offset for the next swipe
+                                            swipeOffset = 0
                                         }
-                                    } else {
-                                        withAnimation {
-                                            swipeOffset = 0 // Snap back to center if swipe wasn't significant
+                                    } else { // Snap back to center
+                                        withAnimation(.easeOut(duration: 0.2)) { // Shorter and smoother snap-back
+                                            swipeOffset = 0
                                         }
                                     }
                                 }

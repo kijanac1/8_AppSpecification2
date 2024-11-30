@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailPage: View {
     
+    @EnvironmentObject var travelData: TravelData
     @State var images: [String]  // List of images
     @State var locationName: String  // Location name
     @State var description: String  // Location description
@@ -62,12 +63,21 @@ struct DetailPage: View {
                         HStack{
                             Spacer()
                             Button(action: {
-                                // Show the alert when the button is pressed
-                                showAlert = true
+                                if let index = travelData.bucketList.firstIndex(of: currentIndex) {
+                                    // Remove if already in bucketList
+                                    travelData.bucketList.remove(at: index)
+                                } else {
+                                    // Add to bucketList if not already present
+                                    travelData.bucketList.append(currentIndex)
+                                    
+                                    // Show the alert when the action is performed
+                                    showAlert = true
+                                }
+                                
                             }) {
-                                Image(systemName: "plus.square")
+                                Image(systemName: travelData.bucketList.contains(currentIndex) ? "plus.square.fill" : "plus.square")
                                     .font(.title)
-                                    .foregroundColor(Color("myBrown"))
+                                    .foregroundColor(travelData.bucketList.contains(currentIndex) ? .black : Color("myBrown"))
                             }
                             .alert(isPresented: $showAlert) {
                                 Alert(
@@ -130,5 +140,15 @@ struct DetailPage: View {
 }
 
 #Preview {
-    DetailPage(images: ["Fiji_1", "Fiji_2"], locationName: "Fiji, South Pacific Islands", description: "Fiji is a tropical paradise located in the South Pacific Ocean, consisting of over 330 islands...", currentIndex: 0)
+    // Create a mock TravelData object with dummy data
+    let mockTravelData = TravelData()
+    mockTravelData.bucketList = [0, 1] // Example data in bucketList
+
+    return DetailPage(
+        images: ["Fiji_1", "Fiji_2"], // Replace with valid image names in your Assets folder
+        locationName: "Fiji, South Pacific Islands",
+        description: "Fiji is a tropical paradise located in the South Pacific Ocean, consisting of over 330 islands...",
+        currentIndex: 0
+    )
+    .environmentObject(mockTravelData) // Provide the mock TravelData object to the preview
 }
