@@ -31,7 +31,6 @@ struct BucketlistPage: View {
                             .padding(.top, 70)
                     )
                     .ignoresSafeArea(edges: .top)
-
                 Rectangle()
                     .fill(Color("myBeige"))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -40,6 +39,7 @@ struct BucketlistPage: View {
                         VStack(spacing: 20) {
                             HStack {
                                 Spacer()
+                                // Edit Button
                                 Button(action: {
                                     isEditing.toggle()
                                 }) {
@@ -48,9 +48,22 @@ struct BucketlistPage: View {
                                         .bold()
                                 }
                                 .padding(.trailing)
+                                Button(action: {
+                                    showAddLocationSheet = true
+                                }) {
+                                    HStack {
+                                        Image(systemName: "plus")
+                                            .font(.largeTitle)
+                                            .foregroundColor(Color("myBrown"))
+                                        Text("Add Location")
+                                            .foregroundColor(Color("myBrown"))
+                                            .bold()
+                                    }
+                                    .padding(.leading, 20)
+                                }
+                                .padding(.trailing)
                             }
                             .padding(.top, -40)
-
                             ScrollView {
                                 VStack(spacing: 10) {
                                     if !travelData.bucketList.isEmpty {
@@ -72,7 +85,6 @@ struct BucketlistPage: View {
                                                             .padding(.top, -20)
                                                             .padding(20)
                                                             .shadow(color: Color.gray.opacity(0.4), radius: 10, x: 0, y: 5)
-                                                        
                                                         if let firstImageName = travelData.locationImages[locIndex].first {
                                                             Image(firstImageName)
                                                                 .resizable()
@@ -83,7 +95,6 @@ struct BucketlistPage: View {
                                                                 .padding(.leading, -161)
                                                                 .padding(.top, -20)
                                                         }
-                                                        
                                                         Text(travelData.locationNames[locIndex])
                                                             .foregroundColor(.black)
                                                             .padding(.leading, 70)
@@ -122,24 +133,7 @@ struct BucketlistPage: View {
                                     }
                                 }
                             }
-
-                            // Add Location button
                             if !isEditing {
-                                Button(action: {
-                                    showAddLocationSheet = true
-                                }) {
-                                    HStack {
-                                        Image(systemName: "plus")
-                                            .font(.largeTitle)
-                                            .foregroundColor(Color("myBrown"))
-                                        Text("Add Location")
-                                            .foregroundColor(Color("myBrown"))
-                                            .bold()
-                                    }
-                                    .padding(.leading, 40)
-                                    Spacer()
-                                }
-                                .padding(.bottom, 40)
                                 .actionSheet(isPresented: $showAddLocationSheet) {
                                     ActionSheet(title: Text("Choose Option"), buttons: [
                                         .default(Text("Custom Location")) {
