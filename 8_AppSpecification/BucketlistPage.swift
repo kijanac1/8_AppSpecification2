@@ -10,10 +10,8 @@ struct BucketlistPage: View {
     @EnvironmentObject var travelData: TravelData // Use TravelData for locations
     @State private var isEditing: Bool = false
     @State private var showAlert = false
+    @State private var showCongratsAlert = false
     @State private var selectedLocationIndex: Int?
-    @State private var showAddLocationSheet = false
-    @State private var showCustomLocationView = false
-    @State private var showSearchLocationView = false
 
     var body: some View {
         NavigationStack {
@@ -31,6 +29,7 @@ struct BucketlistPage: View {
                             .padding(.top, 70)
                     )
                     .ignoresSafeArea(edges: .top)
+                
                 Rectangle()
                     .fill(Color("myBeige"))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -48,22 +47,9 @@ struct BucketlistPage: View {
                                         .bold()
                                 }
                                 .padding(.trailing)
-                                Button(action: {
-                                    showAddLocationSheet = true
-                                }) {
-                                    HStack {
-                                        Image(systemName: "plus")
-                                            .font(.largeTitle)
-                                            .foregroundColor(Color("myBrown"))
-                                        Text("Add Location")
-                                            .foregroundColor(Color("myBrown"))
-                                            .bold()
-                                    }
-                                    .padding(.leading, 20)
-                                }
-                                .padding(.trailing)
                             }
                             .padding(.top, -40)
+
                             ScrollView {
                                 VStack(spacing: 10) {
                                     if !travelData.bucketList.isEmpty {
@@ -85,6 +71,7 @@ struct BucketlistPage: View {
                                                             .padding(.top, -20)
                                                             .padding(20)
                                                             .shadow(color: Color.gray.opacity(0.4), radius: 10, x: 0, y: 5)
+                                                        
                                                         if let firstImageName = travelData.locationImages[locIndex].first {
                                                             Image(firstImageName)
                                                                 .resizable()
@@ -95,6 +82,7 @@ struct BucketlistPage: View {
                                                                 .padding(.leading, -161)
                                                                 .padding(.top, -20)
                                                         }
+                                                        
                                                         Text(travelData.locationNames[locIndex])
                                                             .foregroundColor(.black)
                                                             .padding(.leading, 70)
@@ -105,25 +93,32 @@ struct BucketlistPage: View {
                                                             HStack(spacing: 15) {
                                                                 Spacer()
                                                                 Button(action: {
-                                                                    print("Checked item at index \(locIndex)")
+                                                                    withAnimation {
+                                                                        selectedLocationIndex = locIndex
+                                                                        showCongratsAlert = true
+                                                                    }
                                                                 }) {
                                                                     Image(systemName: "checkmark.circle.fill")
                                                                         .foregroundColor(Color("myTeal"))
                                                                 }
+                                                                
                                                                 Button(action: {
-                                                                    selectedLocationIndex = locIndex
-                                                                    showAlert = true
+                                                                    withAnimation {
+                                                                        selectedLocationIndex = locIndex
+                                                                        showAlert = true
+                                                                    }
                                                                 }) {
                                                                     Image(systemName: "trash")
                                                                         .foregroundColor(Color("myTeal"))
                                                                 }
                                                             }
                                                             .padding(.trailing, 25)
-                                                            .padding(.top, -30)
+                                                            .padding(.top, -45)
                                                         }
                                                     }
                                                 }
                                                 .padding(.horizontal, 15)
+                                                .transition(.slide)
                                             }
                                         }
                                     } else {
@@ -133,22 +128,8 @@ struct BucketlistPage: View {
                                     }
                                 }
                             }
-                            if !isEditing {
-                                .actionSheet(isPresented: $showAddLocationSheet) {
-                                    ActionSheet(title: Text("Choose Option"), buttons: [
-                                        .default(Text("Custom Location")) {
-                                            showCustomLocationView = true
-                                        },
-                                        .default(Text("Search Location")) {
-                                            showSearchLocationView = true
-                                        },
-                                        .cancel()
-                                    ])
-                                }
-                            }
                         }
                     )
-
                 Spacer()
             }
             .background(Color("myBeige"))
@@ -159,17 +140,32 @@ struct BucketlistPage: View {
                     primaryButton: .destructive(Text("Delete")) {
                         if let index = selectedLocationIndex,
                            let bucketListIndex = travelData.bucketList.firstIndex(of: index) {
-                            travelData.bucketList.remove(at: bucketListIndex)
+                            withAnimation {
+                                travelData.bucketList.remove(at: bucketListIndex)
+                            }
                         }
                     },
                     secondaryButton: .cancel()
                 )
             }
-            .navigationDestination(isPresented: $showCustomLocationView) {
-                CustomLocationView(targetPage: .bucketlist, addLocationToBucketList: { newLocation in
-                    // Add new location logic here
-                    showCustomLocationView = false
-                })
+            .alert(isPresented: $showCongratsAlert) {
+                Alert(
+                    title: Text("Congratulations!"),
+                    message: Text("You have completed this trip! Would you like to add this trip to your completed trips?"),
+                    primaryButton: .default(Text("Yes")) {
+                        if let index = selectedLocationIndex,
+                           let bucketListIndex = travelData.bucketList.firstIndex(of: index) {
+                            withAnimation {
+                                travelData.bucketList.remove(at: bucketListIndex)
+                                travelData.completedTrips.append(index)
+                            }
+                        }
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
+            .onDisappear {
+                isEditing = false
             }
         }
     }
