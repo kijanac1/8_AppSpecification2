@@ -270,12 +270,10 @@ struct DiscoveryPage: View {
                         .padding(.top, -675) // Adjusted positioning for dropdown
                         .zIndex(1)
                         .background(
-                            NavigationLink(
-                                destination: CustomLocationView(targetPage: .bucketlist), // Destination view
-                                isActive: $navigateToCustomLocation // Binding to track navigation
-                            ) {
-                                EmptyView() // Invisible link
-                            }
+                            EmptyView() // Placeholder view
+                                .navigationDestination(isPresented: $navigateToCustomLocation) {
+                                    CustomLocationView(targetPage: .bucketlist) // Destination view
+                                }
                         )
                     }
                 }
