@@ -240,27 +240,37 @@ struct DiscoveryPage: View {
                         )
                     }
                     
-                    // DropdownView
-                    if isSearching && !filteredLocations.isEmpty {
+                    // DropdownView with "Add custom location" feature
+                    if isSearching{
                         let filteredImages = filteredLocations.compactMap { location in
                             if let index = travelData.locationNames.firstIndex(of: location) {
                                 return travelData.locationImages[index].first
                             }
                             return nil
                         }
-                        
-                        DropdownView(locations: filteredLocations, images: filteredImages) { selectedLocation in
-                            if let index = travelData.locationNames.firstIndex(of: selectedLocation) {
-                                currentIndex = index
+
+                        DropdownView(
+                            locations: ["Add custom location"] + filteredLocations, // Include "Add custom location"
+                            images: [""] + filteredImages, // Placeholder image for "Add custom location"
+                            onSelect: { selectedLocation in
+                                if selectedLocation == "Add custom location" {
+                                    // Navigate to AddCustomLocationView
+                                    print("Navigate to Add Custom Location")
+                                } else {
+                                    if let index = travelData.locationNames.firstIndex(of: selectedLocation) {
+                                        currentIndex = index
+                                    }
+                                    withAnimation {
+                                        isSearching = false
+                                        searchText = ""
+                                    }
+                                }
                             }
-                            withAnimation {
-                                isSearching = false
-                                searchText = ""
-                            }
-                        }
+                        )
                         .padding(.top, -675) // Adjusted positioning for dropdown
                         .zIndex(1)
                     }
+
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .ignoresSafeArea(edges: .top)
