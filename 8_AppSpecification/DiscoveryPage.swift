@@ -6,7 +6,8 @@ struct DiscoveryPage: View {
     @State private var isSearching: Bool = false
     @State private var searchText: String = ""
     @FocusState private var isSearchFieldFocused: Bool
-    @State private var swipeOffset: CGFloat = 0 // State variable to track the offset for animation
+    @State private var swipeOffset: CGFloat = 0 // to track the offset for animation
+    @State private var navigateToCustomLocation = false
     
 
     var filteredLocations: [String] {
@@ -240,8 +241,8 @@ struct DiscoveryPage: View {
                         )
                     }
                     
-                    // DropdownView with "Add custom location" feature
-                    if isSearching{
+                    // DropdownView
+                    if isSearching {
                         let filteredImages = filteredLocations.compactMap { location in
                             if let index = travelData.locationNames.firstIndex(of: location) {
                                 return travelData.locationImages[index].first
@@ -254,8 +255,7 @@ struct DiscoveryPage: View {
                             images: [""] + filteredImages, // Placeholder image for "Add custom location"
                             onSelect: { selectedLocation in
                                 if selectedLocation == "Add custom location" {
-                                    // Navigate to AddCustomLocationView
-                                    print("Navigate to Add Custom Location")
+                                    navigateToCustomLocation = true // Trigger navigation
                                 } else {
                                     if let index = travelData.locationNames.firstIndex(of: selectedLocation) {
                                         currentIndex = index
@@ -269,8 +269,15 @@ struct DiscoveryPage: View {
                         )
                         .padding(.top, -675) // Adjusted positioning for dropdown
                         .zIndex(1)
+                        .background(
+                            NavigationLink(
+                                destination: CustomLocationView(targetPage: .bucketlist), // Destination view
+                                isActive: $navigateToCustomLocation // Binding to track navigation
+                            ) {
+                                EmptyView() // Invisible link
+                            }
+                        )
                     }
-
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .ignoresSafeArea(edges: .top)

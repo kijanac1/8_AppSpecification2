@@ -74,35 +74,37 @@ struct DropdownView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 0) { // Set spacing to 0 to remove gaps between items
+            VStack(spacing: 0) {
+
+                // Existing Locations
                 ForEach(Array(zip(locations, images)), id: \.0) { location, image in
                     HStack {
                         // Display the image next to the text
                         Image(image)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 60, height: 60) // Fixed size for image
-                            .clipShape(Circle()) // Circular image style
+                            .frame(width: 60, height: 60)
+                            .clipShape(Circle())
                             .padding(.leading, 16)
 
                         Text(location)
                             .font(.body)
                             .foregroundColor(.black)
-                            .padding(.leading, 8) // Space between image and text
+                            .padding(.leading, 8)
 
-                        Spacer() // Push the text and image to the left
+                        Spacer()
                     }
-                    .frame(height: 80) // Consistent height for items
+                    .frame(height: 80)
                     .background(Color.white)
                     .onTapGesture {
                         onSelect(location)
                     }
-                    
+
                     Divider()
                         .background(Color.gray.opacity(0.5))
                 }
             }
-            .padding(.horizontal) 
+            .padding(.horizontal)
         }
         .background(Color.gray.opacity(0.1))
         .cornerRadius(10)
@@ -111,6 +113,3 @@ struct DropdownView: View {
         .zIndex(100) // Ensure it appears on top of other views
     }
 }
-
-
-
