@@ -7,9 +7,17 @@
 
 import SwiftUI
 
+class FilterState: ObservableObject {
+    @Published var selectedRegion: String = "None"
+    @Published var selectedClimate: String = "None"
+    @Published var selectedAccessibility: String = "None"
+    @Published var selectedActivities: String = "None"
+}
+
 struct ContentView: View {
     
     @StateObject private var travelData = TravelData()
+    @StateObject private var filterState = FilterState()
     
     init() {
         // Set the background color of the tab bar
@@ -22,6 +30,7 @@ struct ContentView: View {
             // (Home tab)
             DiscoveryPage()
                 .environmentObject(travelData)
+                .environmentObject(filterState)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }

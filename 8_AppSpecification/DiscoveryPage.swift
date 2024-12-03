@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct DiscoveryPage: View {
     @EnvironmentObject var travelData: TravelData
     @State private var currentIndex = 0
@@ -8,10 +9,30 @@ struct DiscoveryPage: View {
     @FocusState private var isSearchFieldFocused: Bool
     @State private var swipeOffset: CGFloat = 0 // to track the offset for animation
     @State private var navigateToCustomLocation = false
-    
+    @EnvironmentObject var filterState: FilterState
+
 
     var filteredLocations: [String] {
-        travelData.locationNames.filter { searchText.isEmpty || $0.lowercased().contains(searchText.lowercased()) }
+        travelData.locationNames.filter { location in
+            // Search text filter
+            (searchText.isEmpty || location.lowercased().contains(searchText.lowercased()))
+        }
+    }
+    
+    var filteredByFilters: [String] {
+        travelData.locationNames.filter { location in
+            // Region filter
+            (filterState.selectedRegion == "None" || travelData.locationRegions[location] == filterState.selectedRegion) /*&&
+            
+            // Climate filter (if applicable in your data model)
+            (filterState.selectedClimate == "None" || travelData.locationClimates?[location] == filterState.selectedClimate) &&
+            
+            // Accessibility filter (if applicable in your data model)
+            (filterState.selectedAccessibility == "None" || travelData.locationAccessibility?[location] == filterState.selectedAccessibility) &&
+            
+            // Activities filter (if applicable in your data model)
+            (filterState.selectedActivities == "None" || travelData.locationActivities?[location]?.contains(filterState.selectedActivities) == true) */
+        }
     }
 
     var body: some View {
@@ -47,7 +68,7 @@ struct DiscoveryPage: View {
                                     }
                                 }
                                 
-                                NavigationLink(destination: FilterView()) {
+                                NavigationLink(destination: FilterView(currentIndex: $currentIndex)) {
                                     Image(systemName: "gearshape")
                                         .font(.title)
                                         .foregroundColor(.white)
@@ -82,12 +103,16 @@ struct DiscoveryPage: View {
                                     
                                     VStack {
                                         ZStack(alignment: .topLeading) {
-                                            Image(travelData.locationImages[(currentIndex + 1) % travelData.locationImages.count][0])
-                                                .resizable()
-                                                .cornerRadius(15)
-                                                .frame(width: 275, height: 285)
+                                            // Update to use filteredByFilters for the image
+                                            if let imageIndex = travelData.locationNames.firstIndex(of: filteredByFilters[(currentIndex + 1) % filteredByFilters.count]) {
+                                                Image(travelData.locationImages[imageIndex][0])
+                                                    .resizable()
+                                                    .cornerRadius(15)
+                                                    .frame(width: 275, height: 285)
+                                            }
                                             VStack {
-                                                Text(travelData.locationNames[(currentIndex + 1) % travelData.locationNames.count])
+                                                // Update to use filteredByFilters for the name
+                                                Text(filteredByFilters[(currentIndex + 1) % filteredByFilters.count])
                                                     .foregroundColor(.white)
                                                     .bold()
                                                     .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
@@ -98,17 +123,21 @@ struct DiscoveryPage: View {
                                             .padding(.top, 10)
                                         }
                                         .padding(.top, -75)
-                                        Text(travelData.descriptions[(currentIndex + 1) % travelData.descriptions.count])
-                                            .frame(width: 255, height: 115)
-                                            .foregroundColor(Color.black)
-                                            .font(.system(size: 15))
+                                        
+                                        // Update to use filteredByFilters for the description
+                                        if let descriptionIndex = travelData.locationNames.firstIndex(of: filteredByFilters[(currentIndex + 1) % filteredByFilters.count]) {
+                                            Text(travelData.descriptions[descriptionIndex])
+                                                .frame(width: 255, height: 115)
+                                                .foregroundColor(Color.black)
+                                                .font(.system(size: 20))
+                                        }
                                     }
                                     .padding(.top, 120)
                                 }
                                 .padding(.top, -50)
                                 Button(action: {
-                                    // no action
-                                }){
+                                    // No action
+                                }) {
                                     ZStack {
                                         Rectangle()
                                             .fill(Color("myBrown"))
@@ -120,10 +149,8 @@ struct DiscoveryPage: View {
                                     }
                                 }
                                 .padding(.bottom, 95)
-
                             }
                         }
-                        //.offset(x: swipeOffset > 0 ? -UIScreen.main.bounds.width : 0) // Keeps next location static until swipe begins
                         
                         // Existing current location ZStack
                         ZStack {
@@ -148,20 +175,21 @@ struct DiscoveryPage: View {
                                     
                                     VStack {
                                         ZStack(alignment: .topLeading) {
-                                            NavigationLink(destination:
-                                                            DetailPage(
-                                                                images: travelData.locationImages[currentIndex],
-                                                                locationName: travelData.locationNames[currentIndex],
-                                                                description: travelData.descriptions[currentIndex],
-                                                                currentIndex: currentIndex
-                                                            )) {
-                                                                Image(travelData.locationImages[currentIndex][0])
-                                                                    .resizable()
-                                                                    .cornerRadius(15)
-                                                                    .frame(width: 275, height: 285)
-                                                            }
+                                            if let originalIndex = travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex]) {
+                                                NavigationLink(destination: DetailPage(
+                                                    images: travelData.locationImages[originalIndex],
+                                                    locationName: filteredByFilters[currentIndex],
+                                                    description: travelData.descriptions[originalIndex],
+                                                    currentIndex: originalIndex
+                                                )) {
+                                                    Image(travelData.locationImages[originalIndex][0])
+                                                        .resizable()
+                                                        .cornerRadius(15)
+                                                        .frame(width: 275, height: 285)
+                                                }
+                                            }
                                             VStack {
-                                                Text(travelData.locationNames[currentIndex])
+                                                Text(filteredByFilters[currentIndex])
                                                     .foregroundColor(.white)
                                                     .bold()
                                                     .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
@@ -172,30 +200,35 @@ struct DiscoveryPage: View {
                                             .padding(.top, 10)
                                         }
                                         .padding(.top, -75)
-                                        Text(travelData.descriptions[currentIndex])
-                                            .frame(width: 255, height: 115)
-                                            .foregroundColor(Color.black)
-                                            .font(.system(size: 15))
+                                        
+                                        if let descriptionIndex = travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex]) {
+                                            Text(travelData.descriptions[descriptionIndex])
+                                                .frame(width: 255, height: 115)
+                                                .foregroundColor(Color.black)
+                                                .font(.system(size: 20))
+                                        }
                                     }
                                     .padding(.top, 120)
                                 }
                                 .padding(.top, -50)
                                 
                                 Button(action: {
-                                    // Animate the transition to the left
                                     withAnimation(.easeOut(duration: 0.3)) {
                                         swipeOffset = -UIScreen.main.bounds.width
                                     }
-                                    // After the animation completes, update the index and reset swipeOffset
+                                    
+                                    print(currentIndex)
+                                    
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                        // Ensure swipeOffset is reset after index is updated
-                                        currentIndex = (currentIndex + 1) % travelData.locationImages.count
-                                        swipeOffset = UIScreen.main.bounds.width // Pre-position for seamless transition
+                                        // Use filteredByFilters.count when filters are applied
+                                        let totalCount = filteredByFilters.isEmpty ? travelData.locationImages.count : filteredByFilters.count
+                                        currentIndex = (currentIndex + 1) % totalCount
+                                        swipeOffset = UIScreen.main.bounds.width
                                         withAnimation(.easeOut(duration: 0.1)) {
-                                            swipeOffset = 0 // Slide new card into position
+                                            swipeOffset = 0
                                         }
                                     }
-                                }){
+                                }) {
                                     ZStack {
                                         Rectangle()
                                             .fill(Color("myBrown"))
@@ -213,27 +246,28 @@ struct DiscoveryPage: View {
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
-                                    swipeOffset = value.translation.width // Update offset dynamically during swipe
+                                    swipeOffset = value.translation.width
                                 }
                                 .onEnded { value in
+                                    let totalCount = filteredByFilters.isEmpty ? travelData.locationImages.count : filteredByFilters.count
                                     if value.translation.width < -50 { // Swipe left
-                                        withAnimation(.easeOut(duration: 0.25)) { // Smooth animation to left
+                                        withAnimation(.easeOut(duration: 0.25)) {
                                             swipeOffset = -UIScreen.main.bounds.width
                                         }
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { // Match animation duration
-                                            currentIndex = (currentIndex + 1) % travelData.locationImages.count
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                            currentIndex = (currentIndex + 1) % totalCount
                                             swipeOffset = 0
                                         }
                                     } else if value.translation.width > 50 { // Swipe right
-                                        withAnimation(.easeOut(duration: 0.25)) { // Smooth animation to right
+                                        withAnimation(.easeOut(duration: 0.25)) {
                                             swipeOffset = UIScreen.main.bounds.width
                                         }
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                            currentIndex = (currentIndex - 1 + travelData.locationImages.count) % travelData.locationImages.count
+                                            currentIndex = (currentIndex - 1 + totalCount) % totalCount
                                             swipeOffset = 0
                                         }
-                                    } else { // Snap back to center
-                                        withAnimation(.easeOut(duration: 0.2)) { // Shorter and smoother snap-back
+                                    } else {
+                                        withAnimation(.easeOut(duration: 0.2)) {
                                             swipeOffset = 0
                                         }
                                     }
@@ -287,4 +321,5 @@ struct DiscoveryPage: View {
 #Preview {
     DiscoveryPage()
         .environmentObject(TravelData())
+        .environmentObject(FilterState())
 }
