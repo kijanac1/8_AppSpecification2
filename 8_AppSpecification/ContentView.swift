@@ -10,7 +10,7 @@ import SwiftUI
 class FilterState: ObservableObject {
     @Published var selectedRegion: String = "None"
     @Published var selectedClimate: String = "None"
-    @Published var selectedAccessibility: String = "None"
+    @Published var selectedLanguage: String = "None"
     @Published var selectedActivities: String = "None"
 }
 

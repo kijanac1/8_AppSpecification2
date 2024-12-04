@@ -53,6 +53,14 @@ struct GuideView: View {
                             }
                         }
                         Spacer()
+                        
+                        ExpandableSection(title: "Spoken Languages") {
+                            ForEach(TravelGuideData.spokenLanguages[currentIndex], id: \.self) { language in
+                                Text("• \(language)")
+                            }
+                        }
+                        
+                        Spacer()
 
                         ExpandableSection(title: "Common Words & Phrases") {
                             ForEach(TravelGuideData.commonPhrases[currentIndex], id: \.0) { phrase in
@@ -75,11 +83,12 @@ struct GuideView: View {
                                 Text("• \(cultureTip.0) \(cultureTip.1)")
                             }
                         }
+                        
+                        Spacer()
                     }
                 }
                 .frame(width: 330)
                 .frame(maxHeight: .infinity)
-                .cornerRadius(15)
             }
             .padding(.top, -25)
             .padding(.bottom, 100)

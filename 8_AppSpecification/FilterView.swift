@@ -7,19 +7,19 @@ struct FilterView: View {
     
     @State private var showingRegionSelection = false
     @State private var showingClimateSelection = false
-    @State private var showingAccessibilitySelection = false
+    @State private var showingLanguageSelection = false
     @State private var showingActivitiesSelection = false
     
     // Temporary states for selections
     @State private var tempRegion: String = "None"
     @State private var tempClimate: String = "None"
-    @State private var tempAccessibility: String = "None"
+    @State private var tempLanguage: String = "None"
     @State private var tempActivities: String = "None"
 
     let regions = ["None", "North America", "Europe", "Asia", "Oceania", "South America", "Africa"]
     let climates = ["None", "Tropical", "Desert", "Temperate", "Polar"]
-    let accessibilityOptions = ["None", "Wheelchair Accessible", "Public Transport", "Walking Distance"]
-    let activities = ["None", "Hiking", "Swimming", "Shopping", "Dining"]
+    let languageOptions = ["None", "English", "Mandarin", "Spanish", "Arabic", "Portuguese", "French"]
+    let activities = ["None", "Hiking", "Swimming", "Shopping", "Dining", "Skiing", "Camping"]
 
     var body: some View {
         VStack {
@@ -96,13 +96,13 @@ struct FilterView: View {
                             )
                         }
                         
-                        // Button for Accessibility Selection
+                        // Button for Language Selection
                         Button(action: {
-                            tempAccessibility = filterState.selectedAccessibility
-                            showingAccessibilitySelection.toggle()
+                            tempLanguage = filterState.selectedLanguage
+                            showingLanguageSelection.toggle()
                         }) {
                             HStack {
-                                Text("Accessibility: \(filterState.selectedAccessibility)")
+                                Text("Spoken Language: \(filterState.selectedLanguage)")
                                 Spacer()
                                 Image(systemName: "chevron.down")
                             }
@@ -112,13 +112,13 @@ struct FilterView: View {
                             .cornerRadius(10)
                             .shadow(radius: 3)
                         }
-                        .sheet(isPresented: $showingAccessibilitySelection) {
+                        .sheet(isPresented: $showingLanguageSelection) {
                             SelectionView(
-                                title: "Select Accessibility",
-                                options: accessibilityOptions,
-                                currentIndex: $currentIndex, temporarySelection: $tempAccessibility,
+                                title: "Select Language",
+                                options: languageOptions,
+                                currentIndex: $currentIndex, temporarySelection: $tempLanguage,
                                 onConfirm: {
-                                    filterState.selectedAccessibility = tempAccessibility
+                                    filterState.selectedLanguage = tempLanguage
                                 }
                             )
                         }
@@ -155,7 +155,7 @@ struct FilterView: View {
                         Button(action: {
                             filterState.selectedRegion = "None"
                             filterState.selectedClimate = "None"
-                            filterState.selectedAccessibility = "None"
+                            filterState.selectedLanguage = "None"
                             filterState.selectedActivities = "None"
                         }) {
                             ZStack {
