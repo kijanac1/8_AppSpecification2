@@ -4,21 +4,10 @@ struct CompletedPage: View {
     @EnvironmentObject var travelData: TravelData
     @State private var isFavoriteToggled = false
 
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-
-    var filteredTrips: [Int] {
-        isFavoriteToggled
-            ? travelData.completedTrips.filter { travelData.favorites.contains($0) }
-            : travelData.completedTrips
-    }
-
     var body: some View {
         NavigationStack {
             VStack {
+                // Header
                 Rectangle()
                     .fill(Color("myBrown"))
                     .frame(height: 125)
@@ -34,18 +23,10 @@ struct CompletedPage: View {
                         .padding(.top, 70)
                     )
 
-                Button(action: {
-                    print("Edit tapped")
-                    // Add your edit action here
-                }) {
-                    Text("Edit")
-                        .font(.body)
-                        .foregroundColor(Color("myTeal"))
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .bold()
-                }
+                
+                Spacer()
 
+                // Favorites Toggle
                 HStack {
                     Toggle(isOn: $isFavoriteToggled) {
                         Text("Favorites")
@@ -58,10 +39,26 @@ struct CompletedPage: View {
                     Text("Show favorites")
                         .bold()
                         .foregroundColor(Color("myTeal"))
+                    
+                    Button(action: {
+                        print("Edit tapped")
+                    }) {
+                        Text("Edit")
+                            .font(.body)
+                            .foregroundColor(Color("myTeal"))
+                            .padding(.trailing)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .bold()
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 35)
+                .padding(.top, 15)
 
+                // Dynamic Grid
                 ScrollView {
+                    let columns = Array(repeating: GridItem(.flexible(minimum: 100, maximum: UIScreen.main.bounds.width / 3 - 20)), count: 3)
+                    
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(filteredTrips, id: \.self) { index in
                             NavigationLink(
@@ -80,9 +77,10 @@ struct CompletedPage: View {
                                                 Image(travelData.locationImages[index][0])
                                                     .resizable()
                                                     .aspectRatio(contentMode: .fill)
-                                                    .frame(width: 100, height: 100)
+                                                    .frame(width: 85, height: 85)
                                                     .clipped()
                                                     .cornerRadius(10)
+                                                    .padding(.top, -22)
 
                                                 Button(action: {
                                                     if travelData.favorites.contains(index) {
@@ -95,35 +93,34 @@ struct CompletedPage: View {
                                                         .resizable()
                                                         .frame(width: 20, height: 20)
                                                         .foregroundColor(travelData.favorites.contains(index) ? .white : .gray)
-                                                        .padding(.trailing, 5)
-                                                        .padding(.top, 5)
+                                                        .padding(5)
                                                 }
+                                                .offset(x: 0, y: -20)
                                             }
                                         }
 
                                         // Location name
                                         Text(travelData.locationNames[index])
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                            .font(.system(size: 15))
-                                            .padding(.top, 5)
-                                            .padding(.leading)
-                                            .padding(.bottom)
-                                            .padding(.trailing, 2)
+                                            .font(.system(size: 12))
+                                            .lineLimit(2)
+                                            .padding(.horizontal, 10)
                                     }
-                                    .font(.body)
-                                    .frame(width: 120, height: 175)
+                                    .frame(width: 100, height: 150)
                                     .background(Color.white)
                                     .cornerRadius(15)
-                                    .shadow(color: Color.black.opacity(0.5), radius: 5, x: 0, y: 5)
+                                    .shadow(color: Color.black.opacity(0.3), radius: 4, x: 0, y: 2)
                                 }
                             }
-                            .buttonStyle(PlainButtonStyle()) // Remove the default button styling
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
-                    .padding()
+                    .padding(.horizontal, 10)
                 }
 
                 Spacer()
+                
+                // Footer
                 HStack {
                     Image(systemName: "globe")
                         .resizable()
@@ -136,12 +133,19 @@ struct CompletedPage: View {
                         .foregroundColor(Color("myBrown"))
                         .bold()
                 }
-                .padding(.bottom, 100)
+                .padding(.bottom, 120)
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .background(Color("myBeige"))
             .ignoresSafeArea()
         }
+    }
+
+    // Filtered Trips
+    var filteredTrips: [Int] {
+        isFavoriteToggled
+            ? travelData.completedTrips.filter { travelData.favorites.contains($0) }
+            : travelData.completedTrips
     }
 }
 

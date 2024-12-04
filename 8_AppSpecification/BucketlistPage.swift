@@ -65,58 +65,65 @@ struct BucketlistPage: View {
                                                 )
                                             ) {
                                                 HStack {
-                                                    ZStack {
+                                                    ZStack(alignment: .leading) {
+                                                        // Background Rectangle
                                                         Rectangle()
                                                             .fill(Color.white)
                                                             .cornerRadius(15)
                                                             .frame(height: 80)
-                                                            .padding(.top, -20)
-                                                            .padding(20)
+                                                            .padding(.horizontal, 10)
                                                             .shadow(color: Color.gray.opacity(0.4), radius: 10, x: 0, y: 5)
                                                         
-                                                        if let firstImageName = travelData.locationImages[locIndex].first {
-                                                            Image(firstImageName)
-                                                                .resizable()
-                                                                .aspectRatio(contentMode: .fill)
-                                                                .frame(width: 70, height: 70)
-                                                                .clipped()
-                                                                .cornerRadius(15)
-                                                                .padding(.leading, -161)
-                                                                .padding(.top, -20)
-                                                        }
-                                                        
-                                                        Text(travelData.locationNames[locIndex])
-                                                            .foregroundColor(.black)
-                                                            .padding(.leading, 70)
-                                                            .padding(.top, -20)
-                                                            .frame(width: 275, alignment: .leading)
-
-                                                        if isEditing {
-                                                            HStack(spacing: 15) {
-                                                                Spacer()
-                                                                Button(action: {
-                                                                    withAnimation {
-                                                                        selectedLocationIndex = locIndex
-                                                                        showCongratsAlert = true
-                                                                    }
-                                                                }) {
-                                                                    Image(systemName: "checkmark.circle.fill")
-                                                                        .foregroundColor(Color("myTeal"))
-                                                                }
-                                                                
-                                                                Button(action: {
-                                                                    withAnimation {
-                                                                        selectedLocationIndex = locIndex
-                                                                        showAlert = true
-                                                                    }
-                                                                }) {
-                                                                    Image(systemName: "trash")
-                                                                        .foregroundColor(Color("myTeal"))
-                                                                }
+                                                        HStack(spacing: 10) {
+                                                            // Travel Image
+                                                            if let firstImageName = travelData.locationImages[locIndex].first {
+                                                                Image(firstImageName)
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fill)
+                                                                    .frame(width: 70, height: 70)
+                                                                    .clipped()
+                                                                    .cornerRadius(15)
                                                             }
-                                                            .padding(.trailing, 25)
-                                                            .padding(.top, -45)
+                                                            
+                                                            VStack(alignment: .leading, spacing: 5) {
+                                                                // Travel Name
+                                                                Text(travelData.locationNames[locIndex])
+                                                                    .foregroundColor(.black)
+                                                                    //.font(.headline)
+                                                                    .font(.system(size: 14))
+                                                            }
+                                                            
+                                                            Spacer()
+                                                            
+                                                            if isEditing {
+                                                                // Action Buttons
+                                                                HStack(spacing: 15) {
+                                                                    Button(action: {
+                                                                        withAnimation {
+                                                                            selectedLocationIndex = locIndex
+                                                                            showCongratsAlert = true
+                                                                        }
+                                                                    }) {
+                                                                        Image(systemName: "checkmark.circle.fill")
+                                                                            .foregroundColor(Color("myTeal"))
+                                                                            .font(.title2)
+                                                                    }
+                                                                    
+                                                                    Button(action: {
+                                                                        withAnimation {
+                                                                            selectedLocationIndex = locIndex
+                                                                            showAlert = true
+                                                                        }
+                                                                    }) {
+                                                                        Image(systemName: "trash")
+                                                                            .foregroundColor(Color("myTeal"))
+                                                                            .font(.title2)
+                                                                    }
+                                                                }
+                                                                .padding(.trailing, 15)
+                                                            }
                                                         }
+                                                        .padding(.horizontal, 15)
                                                     }
                                                 }
                                                 .padding(.horizontal, 15)
