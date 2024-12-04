@@ -58,7 +58,6 @@ struct SearchBarWithDropdown: View {
                 }
                 .padding(.top, 15)
                 //.frame(maxWidth: .infinity)
-                .background(Color.gray.opacity(0.2)) // Optional for better visibility
                 .cornerRadius(10)
                 .zIndex(1) // Ensure the search bar is above the dropdown
             }
@@ -106,7 +105,6 @@ struct DropdownView: View {
             }
             .padding(.horizontal)
         }
-        .background(Color.gray.opacity(0.1))
         .cornerRadius(10)
         .shadow(radius: 5)
         .frame(maxHeight: 400) // Constrain height to prevent overflow

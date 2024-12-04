@@ -3,13 +3,15 @@ import SwiftUI
 
 struct DiscoveryPage: View {
     @EnvironmentObject var travelData: TravelData
+    @EnvironmentObject var filterState: FilterState
     @State private var currentIndex = 0
     @State private var isSearching: Bool = false
     @State private var searchText: String = ""
     @FocusState private var isSearchFieldFocused: Bool
     @State private var swipeOffset: CGFloat = 0 // to track the offset for animation
     @State private var navigateToCustomLocation = false
-    @EnvironmentObject var filterState: FilterState
+    @State private var navigateToDetailPage = false
+    @State private var selectedLocation: String? = nil
 
 
     var filteredLocations: [String] {
@@ -37,8 +39,6 @@ struct DiscoveryPage: View {
 
     var body: some View {
         ZStack {
-            // Background
-            Color.white.ignoresSafeArea()
 
             // NavigationStack
             NavigationStack {
@@ -80,6 +80,7 @@ struct DiscoveryPage: View {
                     
                     // Main content area
                     ZStack {
+                        
                         if filteredByFilters.isEmpty {
                             // Show "No matches found" message if no locations match the filters
                             VStack{
@@ -104,6 +105,7 @@ struct DiscoveryPage: View {
                                 Spacer()
                             }
                         } else {
+                            
                             // Next location, positioned below
                             ZStack {
                                 Rectangle()
@@ -261,6 +263,7 @@ struct DiscoveryPage: View {
                                             Text("Next Destination")
                                                 .foregroundColor(.white)
                                                 .bold()
+                                            
                                         }
                                     }
                                     .padding(.bottom, 95)
@@ -297,8 +300,12 @@ struct DiscoveryPage: View {
                                         }
                                     }
                             )
+                            
                         }
+                    
                     }
+                    
+                    
                     
                     // DropdownView
                     if isSearching {
@@ -317,7 +324,9 @@ struct DiscoveryPage: View {
                                     navigateToCustomLocation = true // Trigger navigation
                                 } else {
                                     if let index = travelData.locationNames.firstIndex(of: selectedLocation) {
-                                        currentIndex = index
+                                        self.selectedLocation = selectedLocation // Set selected location
+                                        currentIndex = index // Update the current index
+                                        navigateToDetailPage = true // Trigger navigation to detail page
                                     }
                                     withAnimation {
                                         isSearching = false
@@ -327,11 +336,22 @@ struct DiscoveryPage: View {
                             }
                         )
                         .padding(.top, -675) // Adjusted positioning for dropdown
-                        .zIndex(1)
+                        .zIndex(0)
                         .background(
                             EmptyView() // Placeholder view
                                 .navigationDestination(isPresented: $navigateToCustomLocation) {
                                     CustomLocationView(targetPage: .bucketlist) // Destination view
+                                }
+                                .navigationDestination(isPresented: $navigateToDetailPage) {
+                                    if let selectedLocation = selectedLocation,
+                                       let index = travelData.locationNames.firstIndex(of: selectedLocation) {
+                                        DetailPage(
+                                            images: travelData.locationImages[index],
+                                            locationName: selectedLocation,
+                                            description: travelData.descriptions[index],
+                                            currentIndex: index
+                                        )
+                                    }
                                 }
                         )
                     }

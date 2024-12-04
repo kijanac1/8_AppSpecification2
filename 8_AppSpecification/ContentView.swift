@@ -18,6 +18,7 @@ struct ContentView: View {
     
     @StateObject private var travelData = TravelData()
     @StateObject private var filterState = FilterState()
+    @State private var selectedTab: Int = 0 // 0 for Home, 1 for Bucketlist, 2 for Trips
     
     init() {
         // Set the background color of the tab bar
@@ -26,28 +27,30 @@ struct ContentView: View {
     }
     
     var body: some View {
-        TabView() {
-            // (Home tab)
+        TabView(selection: $selectedTab) { // Bind the selected tab
             DiscoveryPage()
                 .environmentObject(travelData)
                 .environmentObject(filterState)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
+                .tag(0) // Assign a tag to identify this tab
             
-            // (Bucketlist tab)
-            BucketlistPage()
+            BucketlistPage(selectedTab: $selectedTab)
                 .environmentObject(travelData)
+                .environmentObject(filterState)
                 .tabItem {
                     Label("Bucketlist", systemImage: "checklist")
                 }
+                .tag(1) // Tag for Bucketlist
             
-            // (Completed Trips)
             CompletedPage()
                 .environmentObject(travelData)
+                .environmentObject(filterState)
                 .tabItem {
                     Label("Trips", systemImage: "suitcase")
                 }
+                .tag(2) // Tag for Completed Trips
         }
         .accentColor(Color("myBeige"))
     }

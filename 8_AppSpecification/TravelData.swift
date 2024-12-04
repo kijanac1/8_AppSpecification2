@@ -8,6 +8,11 @@
 import SwiftUI
 
 class TravelData: ObservableObject {
+    
+    @Published var completedTrips: [Int] = [3, 4, 5, 6, 7]
+    @Published var favorites: Set<Int> = []
+    @Published var bucketList: [Int] = [0, 8, 9, 10, 11]
+    
     @Published var locationImages: [[String]] = [
         ["Fiji_1", "Fiji_2", "Fiji_3", "Fiji_4"],
         ["kyoto_1", "kyoto_2", "kyoto_3"],
@@ -222,65 +227,6 @@ class TravelData: ObservableObject {
         "Bali, Indonesia": ["Indonesian", "Balinese"]
     ]
     
-    let locationActivities: [String: [String]] = [
-        "Fiji, South Pacific Islands": ["Hiking", "Swimming", "Camping"],
-        "Kyoto, Japan": ["Hiking", "Shopping", "Dining"],
-        "Auckland, New Zealand": ["Hiking", "Swimming", "Dining"],
-        "Portland, OR, USA": ["Hiking", "Shopping", "Dining"],
-        "San Diego, CA, USA": ["Swimming", "Shopping", "Dining"],
-        "Las Vegas, NV, USA": ["Shopping", "Dining"],
-        "New Orleans, LA, USA": ["Shopping", "Dining"],
-        "Big Bend National Park, USA": ["Hiking", "Camping"],
-        "Leavenworth, WA, USA": ["Skiing", "Dining"],
-        "Greece, Italy": ["Swimming", "Dining"],
-        "Montego Bay, Jamaica": ["Swimming", "Dining"],
-        "Santo Domingo, Dominican Republic": ["Swimming", "Shopping"],
-        "Tokyo, Japan": ["Shopping", "Dining"],
-        "Paris, France": ["Shopping", "Dining"],
-        "London, United Kingdom": ["Shopping", "Dining"],
-        "Rome, Italy": ["Shopping", "Dining"],
-        "Barcelona, Spain": ["Swimming", "Shopping", "Dining"],
-        "New York City, NY, USA": ["Shopping", "Dining"],
-        "Sydney, Australia": ["Hiking", "Swimming", "Dining"],
-        "Cape Town, South Africa": ["Hiking", "Swimming", "Camping"],
-        "Bangkok, Thailand": ["Shopping", "Dining"],
-        "Dubai, United Arab Emirates": ["Shopping", "Swimming"],
-        "Rio de Janeiro, Brazil": ["Swimming", "Hiking"],
-        "Cairo, Egypt": ["Hiking", "Shopping"],
-        "Istanbul, Turkey": ["Shopping", "Dining"],
-        "Machu Picchu, Peru": ["Hiking", "Camping"],
-        "Honolulu, Hawaii, USA": ["Swimming", "Hiking", "Dining"],
-        "Banff, Alberta, Canada": ["Hiking", "Camping", "Skiing"],
-        "Queenstown, New Zealand": ["Hiking", "Skiing"],
-        "Santorini, Greece": ["Swimming", "Dining"],
-        "Seoul, South Korea": ["Shopping", "Dining"],
-        "Singapore, Singapore": ["Shopping", "Dining"],
-        "Reykjavik, Iceland": ["Hiking", "Camping"],
-        "Buenos Aires, Argentina": ["Shopping", "Dining"],
-        "Prague, Czech Republic": ["Shopping", "Dining"],
-        "Amsterdam, Netherlands": ["Hiking", "Shopping", "Dining"],
-        "Berlin, Germany": ["Shopping", "Dining"],
-        "Marrakech, Morocco": ["Shopping", "Dining"],
-        "Vancouver, British Columbia, Canada": ["Hiking", "Camping", "Dining"],
-        "Edinburgh, Scotland": ["Hiking", "Dining"],
-        "Venice, Italy": ["Shopping", "Dining"],
-        "Hanoi, Vietnam": ["Shopping", "Dining"],
-        "Kruger National Park, South Africa": ["Hiking", "Camping"],
-        "Tulum, Mexico": ["Swimming", "Camping"],
-        "Petra, Jordan": ["Hiking", "Camping"],
-        "Melbourne, Australia": ["Shopping", "Dining"],
-        "Osaka, Japan": ["Shopping", "Dining"],
-        "Dubrovnik, Croatia": ["Swimming", "Dining"],
-        "Grand Canyon National Park, USA": ["Hiking", "Camping"],
-        "Bali, Indonesia": ["Swimming", "Hiking", "Dining"]
-    ]
-
-
-    
-    @Published var completedTrips: [Int] = [3, 4, 5, 6, 7]
-    @Published var favorites: Set<Int> = []
-    @Published var bucketList: [Int] = [0, 8, 9, 10, 11]
-    
     // Dictionary mapping city names to their regions
     @Published var locationRegions: [String: String] = [
         "Fiji, South Pacific Islands": "Oceania",
@@ -334,6 +280,60 @@ class TravelData: ObservableObject {
         "Grand Canyon National Park, USA": "North America",
         "Bali, Indonesia": "Asia"
     ]
+    
+    let locationActivities: [String: [String]] = [
+        "Fiji, South Pacific Islands": ["Hiking", "Swimming", "Camping"],
+        "Kyoto, Japan": ["Hiking", "Shopping", "Dining"],
+        "Auckland, New Zealand": ["Hiking", "Swimming", "Dining"],
+        "Portland, OR, USA": ["Hiking", "Shopping", "Dining"],
+        "San Diego, CA, USA": ["Swimming", "Shopping", "Dining"],
+        "Las Vegas, NV, USA": ["Shopping", "Dining"],
+        "New Orleans, LA, USA": ["Shopping", "Dining"],
+        "Big Bend National Park, USA": ["Hiking", "Camping"],
+        "Leavenworth, WA, USA": ["Skiing", "Dining"],
+        "Greece, Italy": ["Swimming", "Dining"],
+        "Montego Bay, Jamaica": ["Swimming", "Dining"],
+        "Santo Domingo, Dominican Republic": ["Swimming", "Shopping"],
+        "Tokyo, Japan": ["Shopping", "Dining"],
+        "Paris, France": ["Shopping", "Dining"],
+        "London, United Kingdom": ["Shopping", "Dining"],
+        "Rome, Italy": ["Shopping", "Dining"],
+        "Barcelona, Spain": ["Swimming", "Shopping", "Dining"],
+        "New York City, NY, USA": ["Shopping", "Dining"],
+        "Sydney, Australia": ["Hiking", "Swimming", "Dining"],
+        "Cape Town, South Africa": ["Hiking", "Swimming", "Camping"],
+        "Bangkok, Thailand": ["Shopping", "Dining"],
+        "Dubai, United Arab Emirates": ["Shopping", "Swimming"],
+        "Rio de Janeiro, Brazil": ["Swimming", "Hiking"],
+        "Cairo, Egypt": ["Hiking", "Shopping"],
+        "Istanbul, Turkey": ["Shopping", "Dining"],
+        "Machu Picchu, Peru": ["Hiking", "Camping"],
+        "Honolulu, Hawaii, USA": ["Swimming", "Hiking", "Dining"],
+        "Banff, Alberta, Canada": ["Hiking", "Camping", "Skiing"],
+        "Queenstown, New Zealand": ["Hiking", "Skiing"],
+        "Santorini, Greece": ["Swimming", "Dining"],
+        "Seoul, South Korea": ["Shopping", "Dining"],
+        "Singapore, Singapore": ["Shopping", "Dining"],
+        "Reykjavik, Iceland": ["Hiking", "Camping"],
+        "Buenos Aires, Argentina": ["Shopping", "Dining"],
+        "Prague, Czech Republic": ["Shopping", "Dining"],
+        "Amsterdam, Netherlands": ["Hiking", "Shopping", "Dining"],
+        "Berlin, Germany": ["Shopping", "Dining"],
+        "Marrakech, Morocco": ["Shopping", "Dining"],
+        "Vancouver, British Columbia, Canada": ["Hiking", "Camping", "Dining"],
+        "Edinburgh, Scotland": ["Hiking", "Dining"],
+        "Venice, Italy": ["Shopping", "Dining"],
+        "Hanoi, Vietnam": ["Shopping", "Dining"],
+        "Kruger National Park, South Africa": ["Hiking", "Camping"],
+        "Tulum, Mexico": ["Swimming", "Camping"],
+        "Petra, Jordan": ["Hiking", "Camping"],
+        "Melbourne, Australia": ["Shopping", "Dining"],
+        "Osaka, Japan": ["Shopping", "Dining"],
+        "Dubrovnik, Croatia": ["Swimming", "Dining"],
+        "Grand Canyon National Park, USA": ["Hiking", "Camping"],
+        "Bali, Indonesia": ["Swimming", "Hiking", "Dining"]
+    ]
+
     
     
     @Published var descriptions: [String] = [

@@ -7,7 +7,9 @@
 import SwiftUI
 
 struct BucketlistPage: View {
-    @EnvironmentObject var travelData: TravelData // Use TravelData for locations
+    @EnvironmentObject var travelData: TravelData
+    @EnvironmentObject var filterState: FilterState
+    @Binding var selectedTab: Int
     @State private var isEditing: Bool = false
     @State private var showAlert = false
     @State private var showCongratsAlert = false
@@ -43,7 +45,7 @@ struct BucketlistPage: View {
                                     isEditing.toggle()
                                 }) {
                                     Text(isEditing ? "Done" : "Edit")
-                                        .foregroundColor(Color("myBrown"))
+                                        .foregroundColor(Color("myTeal"))
                                         .bold()
                                 }
                                 .padding(.trailing)
@@ -122,9 +124,49 @@ struct BucketlistPage: View {
                                             }
                                         }
                                     } else {
-                                        Text("No locations available. Add new ones!")
-                                            .foregroundColor(Color("myBrown"))
-                                            .padding(.top, 50)
+                                        Spacer()
+
+                                        VStack(spacing: 15) {
+                                            Spacer()
+                                            Image(systemName: "text.badge.plus") // Add an icon
+                                                .font(.system(size: 50))
+                                                .foregroundColor(Color("myBrown"))
+                                                .padding(.bottom, 10)
+                                            
+                                            
+                                            Text("No items currently in your bucket list.")
+                                                .foregroundColor(Color("myBeige"))
+                                                .font(.system(size: 20, weight: .bold))
+                                                .multilineTextAlignment(.center)
+                                                .padding() // Adds inner spacing around the text
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .fill(Color("myBrown"))
+                                                )
+                                                .padding(.horizontal, 30)
+                                                
+                                            
+                                            Spacer()
+                                            Text("Find new locations to add using the ")
+                                                .foregroundColor(Color("myBrown"))
+                                                .font(.system(size: 18))
+                                                .multilineTextAlignment(.center)
+                                                .padding(.horizontal, 30)
+                                            NavigationLink(destination: EmptyView()) { 
+                                                Text("DISCOVERY PAGE.")
+                                                    .foregroundColor(Color("myEmerald"))
+                                                    .font(.system(size: 18, weight: .bold))
+                                                    .padding(.top, -10)
+                                                    .onTapGesture {
+                                                        selectedTab = 0 // Switch to the "Home" tab
+                                                    }
+                                            }
+                                            
+                                            
+                                            
+                                        }
+
+                                            //Spacer()
                                     }
                                 }
                             }
@@ -172,6 +214,9 @@ struct BucketlistPage: View {
 }
 
 #Preview {
-    BucketlistPage()
+    @Previewable @State var selectedTab = 1
+
+    return BucketlistPage(selectedTab: $selectedTab)
         .environmentObject(TravelData())
+        .environmentObject(FilterState())
 }
