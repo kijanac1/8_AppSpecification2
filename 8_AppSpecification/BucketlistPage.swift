@@ -138,17 +138,22 @@ struct BucketlistPage: View {
                                             Image(systemName: "text.badge.plus") // Add an icon
                                                 .font(.system(size: 50))
                                                 .foregroundColor(Color("myBrown"))
-                                                .padding(.top, 150)
+                                                .padding(.top, 100)
                                             //Spacer()
-                                            Text("No items currently in your bucket list. Find new locations to add using the ")
+                                            Text("No items currently in your bucket list.")
                                                 .foregroundColor(Color("myBrown"))
-                                                .font(.system(size: 18, weight: .bold))
+                                                .font(.system(size: 20, weight: .bold))
                                                 .multilineTextAlignment(.center)
                                                 .padding(.horizontal, 30)
-                                            NavigationLink(destination: EmptyView()) { 
+                                            Text("Find new locations to add using the ")
+                                                .foregroundColor(Color("myBrown"))
+                                                .font(.system(size: 18))
+                                                .multilineTextAlignment(.center)
+
+                                            NavigationLink(destination: EmptyView()) {
                                                 Text("DISCOVERY PAGE.")
                                                     .foregroundColor(Color("myEmerald"))
-                                                    .font(.system(size: 20, weight: .bold))
+                                                    .font(.system(size: 18, weight: .bold))
                                                     .padding(.top, -10)
                                                     .onTapGesture {
                                                         selectedTab = 0 // Switch to the "Home" tab

@@ -329,21 +329,17 @@ struct DiscoveryPage: View {
                         }
 
                         DropdownView(
-                            locations: ["Add custom location"] + filteredLocations, // Include "Add custom location"
-                            images: [""] + filteredImages, // Placeholder image for "Add custom location"
+                            locations: filteredLocations, // Only matched locations
+                            images: filteredImages,       // Only matched images
                             onSelect: { selectedLocation in
-                                if selectedLocation == "Add custom location" {
-                                    navigateToCustomLocation = true // Trigger navigation
-                                } else {
-                                    if let index = travelData.locationNames.firstIndex(of: selectedLocation) {
-                                        self.selectedLocation = selectedLocation // Set selected location
-                                        currentIndex = index // Update the current index
-                                        navigateToDetailPage = true // Trigger navigation to detail page
-                                    }
-                                    withAnimation {
-                                        isSearching = false
-                                        searchText = ""
-                                    }
+                                if let index = travelData.locationNames.firstIndex(of: selectedLocation) {
+                                    self.selectedLocation = selectedLocation // Set selected location
+                                    currentIndex = index // Update the current index
+                                    navigateToDetailPage = true // Trigger navigation to detail page
+                                }
+                                withAnimation {
+                                    isSearching = false
+                                    searchText = ""
                                 }
                             }
                         )
@@ -351,9 +347,6 @@ struct DiscoveryPage: View {
                         .zIndex(0)
                         .background(
                             EmptyView() // Placeholder view
-                                .navigationDestination(isPresented: $navigateToCustomLocation) {
-                                    CustomLocationView(targetPage: .bucketlist) // Destination view
-                                }
                                 .navigationDestination(isPresented: $navigateToDetailPage) {
                                     if let selectedLocation = selectedLocation,
                                        let index = travelData.locationNames.firstIndex(of: selectedLocation) {

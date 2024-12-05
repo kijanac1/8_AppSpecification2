@@ -25,6 +25,23 @@ class TravelData: ObservableObject {
         }
     }
     
+    init() {
+            // Load saved data from UserDefaults or use default values
+            self.bucketList = UserDefaults.standard.array(forKey: "bucketList") as? [Int] ?? []
+            self.completedTrips = UserDefaults.standard.array(forKey: "completedTrips") as? [Int] ?? []
+        }
+        
+        // Method to reset UserDefaults and clear data
+        func resetData() {
+            UserDefaults.standard.removeObject(forKey: "completedTrips")
+            UserDefaults.standard.removeObject(forKey: "bucketList")
+            
+            // Reset properties
+            completedTrips = []
+            bucketList = []
+            favorites = []
+        }
+    
     @Published var locationImages: [[String]] = [
         ["Fiji_1", "Fiji_2", "Fiji_3", "Fiji_4"],
         ["kyoto_1", "kyoto_2", "kyoto_3"],
@@ -402,9 +419,4 @@ class TravelData: ObservableObject {
         
         
     ]
-    init() {
-            // Load saved data from UserDefaults or use default values
-            self.bucketList = UserDefaults.standard.array(forKey: "bucketList") as? [Int] ?? []
-            self.completedTrips = UserDefaults.standard.array(forKey: "completedTrips") as? [Int] ?? []
-        }
 }

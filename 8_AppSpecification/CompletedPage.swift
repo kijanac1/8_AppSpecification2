@@ -56,7 +56,7 @@ struct CompletedPage: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom, 35)
-                .padding(.top, 15)
+                .padding(.top, 6)
 
                 // Dynamic Grid
                 if !travelData.completedTrips.isEmpty {
@@ -96,28 +96,25 @@ struct CompletedPage: View {
                     // No trips message
                     VStack(spacing: 15) {
                         Spacer()
-                        Text("✈️ ")
-                            .font(.system(size: 50))
+                        
                         Text("No trips have been marked as completed.")
-                            .foregroundColor(Color("myBeige"))
+                            .foregroundColor(Color("myBrown"))
                             .font(.system(size: 20, weight: .bold))
                             .multilineTextAlignment(.center)
                             .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color("myBrown"))
-                            )
-                            .padding(.horizontal, 30)
+                        Text("✈️ ")
+                            .font(.system(size: 50))
                         Text("You can mark locations as completed by using your")
                             .foregroundColor(Color("myBrown"))
-                            .font(.system(size: 18, weight: .bold))
+                            .font(.system(size: 18))
                             .multilineTextAlignment(.center)
+                            .frame(width: 250) // Set the desired width
                             .padding(.horizontal, 30)
-
+                        
                         NavigationLink(destination: EmptyView()) {
                             Text("BUCKET LIST.")
                                 .foregroundColor(Color("myEmerald"))
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: 18, weight: .bold))
                                 .padding(.top, -10)
                                 .onTapGesture {
                                     selectedTab = 1 // Switch to the "Bucket list" tab
