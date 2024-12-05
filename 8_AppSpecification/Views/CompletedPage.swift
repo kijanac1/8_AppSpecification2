@@ -178,8 +178,8 @@ struct CompletedPage: View {
                             .frame(width: 85, height: 85)
                             .clipped()
                             .cornerRadius(10)
-                            .padding(.top, -22)
-
+                            //.padding(.top, 10)
+                        
                         Button(action: {
                             if travelData.favorites.contains(index) {
                                 travelData.favorites.remove(index)
@@ -193,21 +193,20 @@ struct CompletedPage: View {
                                 .foregroundColor(travelData.favorites.contains(index) ? .white : .gray)
                                 .padding(5)
                         }
-                        .offset(x: 0, y: -20)
+                        //.offset(x: 0, y: -10)
                     }
                 }
-
+                
                 // Location name
                 VStack {
-                    //Spacer()
                     Text(travelData.locationNames[index])
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 12))
                         .lineLimit(2)
                         .padding(.horizontal, 10)
-                    //Spacer() // Adds consistent space below the text
+                        .offset(y: -5)
                 }
-                //.frame(height: 50)
+                .frame(height: 40)
             }
             .frame(width: 100, height: 150)
             .background(isEditing ? Color.pink.opacity(0.2) : Color.white)
