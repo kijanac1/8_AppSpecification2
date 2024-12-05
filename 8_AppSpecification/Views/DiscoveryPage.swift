@@ -476,7 +476,7 @@ struct DiscoveryPage: View {
                                 }
                             }
                         )
-                        .padding(.top, -675) // Adjusted positioning for dropdown
+                        .padding(.top, filteredByFilters.isEmpty ? -645 : -682) // Adjusted positioning for dropdown
                         .zIndex(0)
                         .background(
                             EmptyView() // Placeholder view

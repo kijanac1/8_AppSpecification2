@@ -198,11 +198,16 @@ struct CompletedPage: View {
                 }
 
                 // Location name
-                Text(travelData.locationNames[index])
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.system(size: 12))
-                    .lineLimit(2)
-                    .padding(.horizontal, 10)
+                VStack {
+                    //Spacer()
+                    Text(travelData.locationNames[index])
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.system(size: 12))
+                        .lineLimit(2)
+                        .padding(.horizontal, 10)
+                    //Spacer() // Adds consistent space below the text
+                }
+                //.frame(height: 50)
             }
             .frame(width: 100, height: 150)
             .background(isEditing ? Color.pink.opacity(0.2) : Color.white)
