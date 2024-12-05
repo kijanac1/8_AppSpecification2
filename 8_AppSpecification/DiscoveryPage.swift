@@ -13,6 +13,7 @@ struct DiscoveryPage: View {
     @State private var navigateToDetailPage = false
     @State private var selectedLocation: String? = nil
     @State private var showPopup = false
+    @State private var showNextCard = true
 
 
     var filteredLocations: [String] {
@@ -107,136 +108,138 @@ struct DiscoveryPage: View {
                             }
                         } else {
                             
-                            // Next location, positioned below
-                            ZStack {
-                                Rectangle()
-                                    .fill(Color("myBeige"))
-                                    .cornerRadius(50)
-                                    .frame(width: 350, height: 600)
-                                    .padding(.horizontal, 20)
-                                    .padding(.top, 10)
-                                    .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
-                                    .padding(.top, -40)
-                                
-                                VStack {
-                                    ZStack(alignment: .center) {
-                                        Rectangle()
-                                            .fill(Color.white)
-                                            .cornerRadius(20)
-                                            .frame(width: 300, height: 440)
-                                            .padding(.horizontal, 15)
-                                            .padding(.top, 50)
-                                            .padding(40)
-                                        
-                                        VStack {
-                                            ZStack(alignment: .topLeading) {
-                                                // Update to use filteredByFilters for the image
-                                                if let imageIndex = travelData.locationNames.firstIndex(of: filteredByFilters[(currentIndex + 1) % filteredByFilters.count]) {
-                                                    Image(travelData.locationImages[imageIndex][0])
-                                                        .resizable()
-                                                        .cornerRadius(15)
-                                                        .frame(width: 275, height: 285)
+                            if showNextCard{
+                                // Next location, positioned below
+                                ZStack {
+                                    Rectangle()
+                                        .fill(Color("myBeige"))
+                                        .cornerRadius(50)
+                                        .frame(width: 350, height: 600)
+                                        .padding(.horizontal, 20)
+                                        .padding(.top, 10)
+                                        .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+                                        .padding(.top, -40)
+                                    
+                                    VStack {
+                                        ZStack(alignment: .center) {
+                                            Rectangle()
+                                                .fill(Color.white)
+                                                .cornerRadius(20)
+                                                .frame(width: 300, height: 440)
+                                                .padding(.horizontal, 15)
+                                                .padding(.top, 50)
+                                                .padding(40)
+                                            
+                                            VStack {
+                                                ZStack(alignment: .topLeading) {
+                                                    // Update to use filteredByFilters for the image
+                                                    if let imageIndex = travelData.locationNames.firstIndex(of: filteredByFilters[(currentIndex + 1) % filteredByFilters.count]) {
+                                                        Image(travelData.locationImages[imageIndex][0])
+                                                            .resizable()
+                                                            .cornerRadius(15)
+                                                            .frame(width: 275, height: 285)
+                                                    }
+                                                    VStack {
+                                                        // Update to use filteredByFilters for the name
+                                                        Text(filteredByFilters[(currentIndex + 1) % filteredByFilters.count])
+                                                            .foregroundColor(.white)
+                                                            .bold()
+                                                            .shadow(color: Color.black.opacity(1), radius: 10, x: 4, y: 2)
+                                                            .padding(.leading)
+                                                            .frame(width: 250, alignment: .leading)
+                                                            .lineLimit(2)
+                                                            .background(
+                                                                RoundedRectangle(cornerRadius: 0)
+                                                                    .fill(Color.black.opacity(0.3))
+                                                                
+                                                            )
+                                                        
+                                                    }
+                                                    .padding(.top, 10)
                                                 }
-                                                VStack {
-                                                    // Update to use filteredByFilters for the name
-                                                    Text(filteredByFilters[(currentIndex + 1) % filteredByFilters.count])
+                                                .padding(.top, -75)
+                                                
+                                                // Update to use filteredByFilters for the description
+                                                if let descriptionIndex = travelData.locationNames.firstIndex(of: filteredByFilters[(currentIndex + 1) % filteredByFilters.count]) {
+                                                    Text(travelData.descriptions[descriptionIndex])
+                                                        .frame(width: 255, height: 115)
+                                                        .foregroundColor(Color.black)
+                                                        .font(.system(size: 20))
+                                                }
+                                            }
+                                            .padding(.top, 120)
+                                        }
+                                        .padding(.top, -50)
+                                        HStack {
+                                            
+                                            Spacer()
+                                            // Rewind Button
+                                            Button(action: {
+                                                // nothing
+                                            }
+                                            ) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(Color("myBrown"))
+                                                        .frame(width: 60, height: 60)
+                                                    Image(systemName: "arrow.left")
+                                                        .font(.title)
                                                         .foregroundColor(.white)
-                                                        .bold()
-                                                        .shadow(color: Color.black.opacity(1), radius: 10, x: 4, y: 2)
-                                                        .padding(.leading)
-                                                        .frame(width: 250, alignment: .leading)
-                                                        .lineLimit(2)
-                                                        .background(
-                                                            RoundedRectangle(cornerRadius: 0)
-                                                                .fill(Color.black.opacity(0.3))
-                                                            
-                                                        )
+                                                        .fontWeight(.bold)
+                                                }
+                                            }
+                                            
+                                            Spacer()
+                                            // Add to Bucket List Button
+                                            Button(action: {
+                                                if let locationIndex = travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex]) {
+                                                    if travelData.bucketList.contains(locationIndex) {
+                                                        // Remove from bucket list if already present
+                                                    } else {
+                                                        // Add to bucket list if not present
+                                                    }
+                                                }
+                                            }) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
+                                                            .flatMap { travelData.bucketList.contains($0) } == true
+                                                              ? Color("myTeal") // Filled color if in bucket list
+                                                              : Color.gray.opacity(0.3)) // Pale color if not in bucket list
+                                                        .frame(width: 60, height: 60)
                                                     
-                                                }
-                                                .padding(.top, 10)
-                                            }
-                                            .padding(.top, -75)
-                                            
-                                            // Update to use filteredByFilters for the description
-                                            if let descriptionIndex = travelData.locationNames.firstIndex(of: filteredByFilters[(currentIndex + 1) % filteredByFilters.count]) {
-                                                Text(travelData.descriptions[descriptionIndex])
-                                                    .frame(width: 255, height: 115)
-                                                    .foregroundColor(Color.black)
-                                                    .font(.system(size: 20))
-                                            }
-                                        }
-                                        .padding(.top, 120)
-                                    }
-                                    .padding(.top, -50)
-                                    HStack {
-                                        
-                                        Spacer()
-                                        // Rewind Button
-                                        Button(action: {
-                                            // nothing
-                                            }
-                                        ) {
-                                            ZStack {
-                                                Circle()
-                                                    .fill(Color("myBrown"))
-                                                    .frame(width: 60, height: 60)
-                                                Image(systemName: "arrow.left")
-                                                    .font(.title)
-                                                    .foregroundColor(.white)
-                                                    .fontWeight(.bold)
-                                            }
-                                        }
-
-                                        Spacer()
-                                        // Add to Bucket List Button
-                                        Button(action: {
-                                            if let locationIndex = travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex]) {
-                                                if travelData.bucketList.contains(locationIndex) {
-                                                    // Remove from bucket list if already present
-                                                } else {
-                                                    // Add to bucket list if not present
+                                                    Image(systemName: "airplane")
+                                                        .font(.title)
+                                                        .foregroundColor(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
+                                                            .flatMap { travelData.bucketList.contains($0) } == true
+                                                                         ? .white // Filled color if in bucket list
+                                                                         : .gray) // Pale color if not in bucket list
+                                                        .fontWeight(.bold)
                                                 }
                                             }
-                                        }) {
-                                            ZStack {
-                                                Circle()
-                                                    .fill(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
-                                                            .flatMap { travelData.bucketList.contains($0) } == true
-                                                          ? Color("myTeal") // Filled color if in bucket list
-                                                          : Color.gray.opacity(0.3)) // Pale color if not in bucket list
-                                                    .frame(width: 60, height: 60)
-
-                                                Image(systemName: "airplane")
-                                                    .font(.title)
-                                                    .foregroundColor(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
-                                                            .flatMap { travelData.bucketList.contains($0) } == true
-                                                          ? .white // Filled color if in bucket list
-                                                          : .gray) // Pale color if not in bucket list
-                                                    .fontWeight(.bold)
-                                            }
-                                        }
                                             
-                                        Spacer()
-
-                                        // Skip Button
-                                        Button(action: {
-                                            // nothing
+                                            Spacer()
+                                            
+                                            // Skip Button
+                                            Button(action: {
+                                                // nothing
                                             }
-                                        ) {
-                                            ZStack {
-                                                Circle()
-                                                    .fill(Color("myEmerald"))
-                                                    .frame(width: 60, height: 60)
-                                                Image(systemName: "arrow.uturn.forward")
-                                                    .font(.title)
-                                                    .foregroundColor(.white)
-                                                    .fontWeight(.bold)
+                                            ) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(Color("myEmerald"))
+                                                        .frame(width: 60, height: 60)
+                                                    Image(systemName: "arrow.uturn.forward")
+                                                        .font(.title)
+                                                        .foregroundColor(.white)
+                                                        .fontWeight(.bold)
+                                                }
                                             }
+                                            Spacer()
                                         }
-                                        Spacer()
+                                        .padding(.bottom, 80)
+                                        //.padding(.bottom, 95)
                                     }
-                                    .padding(.bottom, 80)
-                                    //.padding(.bottom, 95)
                                 }
                             }
                             
@@ -313,6 +316,7 @@ struct DiscoveryPage: View {
                                         Button(action: {
                                             withAnimation(.easeOut(duration: 0.25)) {
                                                 swipeOffset = -UIScreen.main.bounds.width // Swipe left
+                                                showNextCard = true
                                             }
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                                                 let totalCount = filteredByFilters.isEmpty ? travelData.locationImages.count : filteredByFilters.count
@@ -378,6 +382,7 @@ struct DiscoveryPage: View {
                                         Button(action: {
                                             withAnimation(.easeOut(duration: 0.25)) {
                                                 swipeOffset = UIScreen.main.bounds.width // Swipe right
+                                                showNextCard = false
                                             }
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                                                 let totalCount = filteredByFilters.isEmpty ? travelData.locationImages.count : filteredByFilters.count
@@ -411,6 +416,7 @@ struct DiscoveryPage: View {
                                         if value.translation.width < -50 { // Swipe left
                                             withAnimation(.easeOut(duration: 0.25)) {
                                                 swipeOffset = -UIScreen.main.bounds.width
+                                                showNextCard = true
                                             }
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                                                 currentIndex = (currentIndex + 1) % totalCount
@@ -419,6 +425,7 @@ struct DiscoveryPage: View {
                                         } else if value.translation.width > 50 { // Swipe right
                                             withAnimation(.easeOut(duration: 0.25)) {
                                                 swipeOffset = UIScreen.main.bounds.width
+                                                showNextCard = false
                                             }
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                                                 currentIndex = (currentIndex - 1 + totalCount) % totalCount
