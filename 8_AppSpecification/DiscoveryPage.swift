@@ -141,10 +141,16 @@ struct DiscoveryPage: View {
                                                     Text(filteredByFilters[(currentIndex + 1) % filteredByFilters.count])
                                                         .foregroundColor(.white)
                                                         .bold()
-                                                        .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
+                                                        .shadow(color: Color.black.opacity(1), radius: 10, x: 4, y: 2)
                                                         .padding(.leading)
                                                         .frame(width: 250, alignment: .leading)
                                                         .lineLimit(2)
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 0)
+                                                                .fill(Color.black.opacity(0.3))
+                                                            
+                                                        )
+                                                    
                                                 }
                                                 .padding(.top, 10)
                                             }
@@ -218,10 +224,16 @@ struct DiscoveryPage: View {
                                                     Text(filteredByFilters[currentIndex])
                                                         .foregroundColor(.white)
                                                         .bold()
-                                                        .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
+                                                        .shadow(color: Color.black.opacity(1), radius: 10, x: 4, y: 2)
+                                                    //.shadow(color: Color.gray.opacity(0.8), radius: 6, x: -4, y: -2)
                                                         .padding(.leading)
                                                         .frame(width: 250, alignment: .leading)
                                                         .lineLimit(2)
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 0)
+                                                                .fill(Color.black.opacity(0.3))
+                                                            
+                                                        )
                                                 }
                                                 .padding(.top, 10)
                                             }

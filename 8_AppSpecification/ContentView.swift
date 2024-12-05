@@ -44,7 +44,7 @@ struct ContentView: View {
                 }
                 .tag(1) // Tag for Bucketlist
             
-            CompletedPage()
+            CompletedPage(selectedTab: $selectedTab)
                 .environmentObject(travelData)
                 .environmentObject(filterState)
                 .tabItem {
