@@ -3,7 +3,9 @@ import SwiftUI
 
 struct FilterView: View {
     @EnvironmentObject var filterState: FilterState
+    @Environment(\.dismiss) private var dismiss
     @Binding var currentIndex: Int
+    @Binding var selectedTab: Int
     
     @State private var showingRegionSelection = false
     @State private var showingClimateSelection = false
@@ -15,6 +17,7 @@ struct FilterView: View {
     @State private var tempClimate: String = "None"
     @State private var tempLanguage: String = "None"
     @State private var tempActivities: String = "None"
+    @State private var navigateToHomepage = false
 
     let regions = ["None", "North America", "Europe", "Asia", "Oceania", "South America", "Africa"]
     let climates = ["None", "Tropical", "Desert", "Temperate", "Polar"]
@@ -150,7 +153,7 @@ struct FilterView: View {
                                 }
                             )
                         }
-                        .padding(.bottom, 50)
+                        .padding(.bottom, 30)
                         
                         Button(action: {
                             filterState.selectedRegion = "None"
@@ -168,6 +171,21 @@ struct FilterView: View {
                                     .bold()
                             }
                         }
+                        Button(action: {
+                            dismiss() // Dismiss the current view and go back
+                        }) {
+                            ZStack {
+                                Rectangle()
+                                    .fill(Color("myTeal"))
+                                    .cornerRadius(10)
+                                    .frame(width: 175, height: 40)
+                                Text("Done")
+                                    .foregroundColor(.white)
+                                    .bold()
+                            }
+                        }
+                        //.padding(.top, 10)
+                        
                     }
                     .padding(.horizontal, 20)
                 }
@@ -223,8 +241,9 @@ struct SelectionView: View {
 }
 
 #Preview {
-    @Previewable @State var sampleIndex = 0 // Define a State property for the preview
-
-    return FilterView(currentIndex: $sampleIndex) // Pass the Binding of the State property
+    @Previewable @State var sampleIndex = 0
+    @Previewable @State var selectedTab = 0
+    
+    FilterView(currentIndex: $sampleIndex, selectedTab: $selectedTab) // Pass the Binding of the State property
         .environmentObject(FilterState())
 }

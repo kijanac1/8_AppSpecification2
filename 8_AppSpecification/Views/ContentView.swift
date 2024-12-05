@@ -28,7 +28,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) { // Bind the selected tab
-            DiscoveryPage()
+            DiscoveryPage(selectedTab: $selectedTab)
                 .environmentObject(travelData)
                 .environmentObject(filterState)
                 .tabItem {

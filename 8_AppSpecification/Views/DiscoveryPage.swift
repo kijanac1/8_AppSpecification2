@@ -14,6 +14,7 @@ struct DiscoveryPage: View {
     @State private var selectedLocation: String? = nil
     @State private var showPopup = false
     @State private var showNextCard = true
+    @Binding var selectedTab: Int
 
 
     var filteredLocations: [String] {
@@ -70,7 +71,7 @@ struct DiscoveryPage: View {
                                     }
                                 }
                                 
-                                NavigationLink(destination: FilterView(currentIndex: $currentIndex)) {
+                                NavigationLink(destination: FilterView(currentIndex: $currentIndex, selectedTab: $selectedTab)) {
                                     Image(systemName: "gearshape")
                                         .font(.title)
                                         .foregroundColor(.white)
@@ -501,7 +502,9 @@ struct DiscoveryPage: View {
 }
 
 #Preview {
-    DiscoveryPage()
+    @Previewable @State var selectedTab = 0
+    
+    DiscoveryPage(selectedTab: $selectedTab)
         .environmentObject(TravelData())
         .environmentObject(FilterState())
 }
