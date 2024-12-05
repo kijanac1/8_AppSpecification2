@@ -138,31 +138,17 @@ struct BucketlistPage: View {
                                             Image(systemName: "text.badge.plus") // Add an icon
                                                 .font(.system(size: 50))
                                                 .foregroundColor(Color("myBrown"))
-                                                .padding(.bottom, 10)
-                                            
-                                            
-                                            Text("No items currently in your bucket list.")
-                                                .foregroundColor(Color("myBeige"))
-                                                .font(.system(size: 20, weight: .bold))
-                                                .multilineTextAlignment(.center)
-                                                .padding() // Adds inner spacing around the text
-                                                .background(
-                                                    RoundedRectangle(cornerRadius: 10)
-                                                        .fill(Color("myBrown"))
-                                                )
-                                                .padding(.horizontal, 30)
-                                                
-                                            
-                                            Spacer()
-                                            Text("Find new locations to add using the ")
+                                                .padding(.top, 150)
+                                            //Spacer()
+                                            Text("No items currently in your bucket list. Find new locations to add using the ")
                                                 .foregroundColor(Color("myBrown"))
-                                                .font(.system(size: 18))
+                                                .font(.system(size: 18, weight: .bold))
                                                 .multilineTextAlignment(.center)
                                                 .padding(.horizontal, 30)
                                             NavigationLink(destination: EmptyView()) { 
                                                 Text("DISCOVERY PAGE.")
                                                     .foregroundColor(Color("myEmerald"))
-                                                    .font(.system(size: 18, weight: .bold))
+                                                    .font(.system(size: 20, weight: .bold))
                                                     .padding(.top, -10)
                                                     .onTapGesture {
                                                         selectedTab = 0 // Switch to the "Home" tab
@@ -182,36 +168,45 @@ struct BucketlistPage: View {
                 Spacer()
             }
             .background(Color("myBeige"))
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Delete Location"),
-                    message: Text("Are you sure you want to delete this location?"),
-                    primaryButton: .destructive(Text("Delete")) {
-                        if let index = selectedLocationIndex,
-                           let bucketListIndex = travelData.bucketList.firstIndex(of: index) {
-                            withAnimation {
-                                travelData.bucketList.remove(at: bucketListIndex)
+            .alert(isPresented: Binding(
+                get: { showAlert || showCongratsAlert },
+                set: { value in
+                    if !value {
+                        showAlert = false
+                        showCongratsAlert = false
+                    }
+                }
+            )) {
+                if showAlert {
+                    return Alert(
+                        title: Text("Delete Location"),
+                        message: Text("Are you sure you want to delete this location?"),
+                        primaryButton: .destructive(Text("Delete")) {
+                            if let index = selectedLocationIndex,
+                               let bucketListIndex = travelData.bucketList.firstIndex(of: index) {
+                                withAnimation {
+                                    travelData.bucketList.remove(at: bucketListIndex)
+                                }
                             }
-                        }
-                    },
-                    secondaryButton: .cancel()
-                )
-            }
-            .alert(isPresented: $showCongratsAlert) {
-                Alert(
-                    title: Text("Congratulations!"),
-                    message: Text("You have completed this trip! Would you like to add this trip to your completed trips?"),
-                    primaryButton: .default(Text("Yes")) {
-                        if let index = selectedLocationIndex,
-                           let bucketListIndex = travelData.bucketList.firstIndex(of: index) {
-                            withAnimation {
-                                travelData.bucketList.remove(at: bucketListIndex)
-                                travelData.completedTrips.append(index)
+                        },
+                        secondaryButton: .cancel()
+                    )
+                } else {
+                    return Alert(
+                        title: Text("Congratulations!"),
+                        message: Text("You have completed this trip! Would you like to add this trip to your completed trips?"),
+                        primaryButton: .default(Text("Yes")) {
+                            if let index = selectedLocationIndex,
+                               let bucketListIndex = travelData.bucketList.firstIndex(of: index) {
+                                withAnimation {
+                                    travelData.bucketList.remove(at: bucketListIndex)
+                                    travelData.completedTrips.append(index)
+                                }
                             }
-                        }
-                    },
-                    secondaryButton: .cancel()
-                )
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
             }
             .onDisappear {
                 isEditing = false

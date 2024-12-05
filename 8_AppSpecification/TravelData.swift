@@ -9,9 +9,21 @@ import SwiftUI
 
 class TravelData: ObservableObject {
     
-    @Published var completedTrips: [Int] = [3, 4, 5, 6, 7]
+    /*@Published var completedTrips: [Int] = [3, 4, 5, 6, 7]
+     @Published var favorites: Set<Int> = []
+     @Published var bucketList: [Int] = [0, 8, 9, 10, 11]*/
+    @Published var completedTrips: [Int] {
+        didSet {
+            UserDefaults.standard.set(completedTrips, forKey: "completedTrips")
+        }
+    }
     @Published var favorites: Set<Int> = []
-    @Published var bucketList: [Int] = [0, 8, 9, 10, 11]
+    
+    @Published var bucketList: [Int] {
+        didSet {
+            UserDefaults.standard.set(bucketList, forKey: "bucketList")
+        }
+    }
     
     @Published var locationImages: [[String]] = [
         ["Fiji_1", "Fiji_2", "Fiji_3", "Fiji_4"],
@@ -40,30 +52,30 @@ class TravelData: ObservableObject {
         ["cairo_1"],
         ["istanbul_1"],
         ["machuPicchu_1"],
-         ["honolulu_1"],
-         ["Banff_1"],
-         ["queenstown_1"],
-         ["santorini_1"],
-         ["seoul_1"],
-         ["singapore_1"],
-         ["reykjavik_1"],
-         ["buenosAires_1"],
-         ["prague_1"],
-         ["amsterdam_1"],
-         ["berlin_1"],
-         ["marrakech_1"],
-         ["vancouver_1"],
-         ["edinburgh_1"],
-         ["venice_1"],
-         ["hanoi_1"],
-         ["kruger_1"],
-         ["tulum_1"],
-         ["petra_1"],
-         ["melbourne_1"],
-         ["osaka_1"],
-         ["dubrovnik_1"],
-         ["grandCanyon_1"],
-         ["bali_1"]
+        ["honolulu_1"],
+        ["Banff_1"],
+        ["queenstown_1"],
+        ["santorini_1"],
+        ["seoul_1"],
+        ["singapore_1"],
+        ["reykjavik_1"],
+        ["buenosAires_1"],
+        ["prague_1"],
+        ["amsterdam_1"],
+        ["berlin_1"],
+        ["marrakech_1"],
+        ["vancouver_1"],
+        ["edinburgh_1"],
+        ["venice_1"],
+        ["hanoi_1"],
+        ["kruger_1"],
+        ["tulum_1"],
+        ["petra_1"],
+        ["melbourne_1"],
+        ["osaka_1"],
+        ["dubrovnik_1"],
+        ["grandCanyon_1"],
+        ["bali_1"]
         
     ]
     
@@ -93,31 +105,31 @@ class TravelData: ObservableObject {
         "Rio de Janeiro, Brazil",
         "Cairo, Egypt",
         "Istanbul, Turkey",
-         "Machu Picchu, Peru",
-         "Honolulu, Hawaii, USA",
-         "Banff, Alberta, Canada",
-         "Queenstown, New Zealand",
-         "Santorini, Greece",
-         "Seoul, South Korea",
-         "Singapore, Singapore",
-         "Reykjavik, Iceland",
-         "Buenos Aires, Argentina",
-         "Prague, Czech Republic",
-         "Amsterdam, Netherlands",
-         "Berlin, Germany",
-         "Marrakech, Morocco",
-         "Vancouver, British Columbia, Canada",
-         "Edinburgh, Scotland",
-         "Venice, Italy",
-         "Hanoi, Vietnam",
-         "Kruger National Park, South Africa",
-         "Tulum, Mexico",
-         "Petra, Jordan",
-         "Melbourne, Australia",
-         "Osaka, Japan",
-         "Dubrovnik, Croatia",
-         "Grand Canyon National Park, USA",
-         "Bali, Indonesia"
+        "Machu Picchu, Peru",
+        "Honolulu, Hawaii, USA",
+        "Banff, Alberta, Canada",
+        "Queenstown, New Zealand",
+        "Santorini, Greece",
+        "Seoul, South Korea",
+        "Singapore, Singapore",
+        "Reykjavik, Iceland",
+        "Buenos Aires, Argentina",
+        "Prague, Czech Republic",
+        "Amsterdam, Netherlands",
+        "Berlin, Germany",
+        "Marrakech, Morocco",
+        "Vancouver, British Columbia, Canada",
+        "Edinburgh, Scotland",
+        "Venice, Italy",
+        "Hanoi, Vietnam",
+        "Kruger National Park, South Africa",
+        "Tulum, Mexico",
+        "Petra, Jordan",
+        "Melbourne, Australia",
+        "Osaka, Japan",
+        "Dubrovnik, Croatia",
+        "Grand Canyon National Park, USA",
+        "Bali, Indonesia"
         
     ]
     
@@ -333,7 +345,7 @@ class TravelData: ObservableObject {
         "Grand Canyon National Park, USA": ["Hiking", "Camping"],
         "Bali, Indonesia": ["Swimming", "Hiking", "Dining"]
     ]
-
+    
     
     
     @Published var descriptions: [String] = [
@@ -389,4 +401,10 @@ class TravelData: ObservableObject {
         "Bali, Indonesia, is a tropical paradise known for its lush rice terraces, vibrant temples, and stunning beaches. Visitors can experience Balinese culture, wellness retreats, and breathtaking landscapes."
         
         
-    ]}
+    ]
+    init() {
+            // Load saved data from UserDefaults or use default values
+            self.bucketList = UserDefaults.standard.array(forKey: "bucketList") as? [Int] ?? []
+            self.completedTrips = UserDefaults.standard.array(forKey: "completedTrips") as? [Int] ?? []
+        }
+}

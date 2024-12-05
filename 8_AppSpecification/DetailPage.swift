@@ -16,6 +16,7 @@ struct DetailPage: View {
     @State var currentIndex: Int
     @State private var currentImageIndex = 0
     @State private var showAlert = false
+    @State private var showCompletedAlert = false
     
     var body: some View {
         VStack {
@@ -63,18 +64,21 @@ struct DetailPage: View {
                         HStack{
                             Spacer()
                             Button(action: {
-                                if let index = travelData.bucketList.firstIndex(of: currentIndex) {
-                                    // Remove if already in bucketList
-                                    travelData.bucketList.remove(at: index)
-                                } else {
-                                    // Add to bucketList if not already present
-                                    travelData.bucketList.append(currentIndex)
-                                    
-                                    // Show the alert when the action is performed
-                                    showAlert = true
+                                if travelData.completedTrips.contains(currentIndex){
+                                    showCompletedAlert = true
                                 }
-                                
-                            }) {
+                                else{
+                                    if let index = travelData.bucketList.firstIndex(of: currentIndex) {
+                                    // Remove if already in bucketList
+                                        travelData.bucketList.remove(at: index)
+                                    } else {
+                                        // Add to bucketList if not already present
+                                        travelData.bucketList.append(currentIndex)
+                                    }
+                                    // Show the alert when the action is performed
+                                        showAlert = true
+                                    }
+                                }) {
                                 Image(systemName: travelData.bucketList.contains(currentIndex) ? "plus.square.fill" : "plus.square")
                                     .font(.title)
                                     .foregroundColor(travelData.bucketList.contains(currentIndex) ? .black : Color("myBrown"))
@@ -83,6 +87,13 @@ struct DetailPage: View {
                                 Alert(
                                     title: Text("Successfully added to your bucket list"),
                                     dismissButton: .default(Text("Continue"))
+                                )
+                            }
+                            .alert(isPresented: $showCompletedAlert) {
+                                Alert(
+                                    title: Text("Oops! Looks like you've already been there."),
+                                    message: Text("Try exploring other locations that you haven't visited yet!"),
+                                    dismissButton: .default(Text("Got it"))
                                 )
                             }
                             
