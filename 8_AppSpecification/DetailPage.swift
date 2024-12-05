@@ -28,19 +28,32 @@ struct DetailPage: View {
                 HStack {
                     Text(locationName)
                         .foregroundColor(Color("myGreen"))
-                        .font(.system(size: 20))
-                        .padding(.top, 15)
-
+                        .bold()
+                        .font(.system(size: 16))
+                        //.padding(.top, 15)
+                    
+                    
+                    NavigationLink(
+                        destination: GuideView(
+                            locationName: locationName,
+                            currentIndex: currentIndex
+                        )
+                    ) {
+                        Image(systemName: "book")
+                            .font(.title)
+                            .foregroundColor(Color("myBrown"))
+                    }
+                    //.padding(.top, 15)
                     Button(action: {
                         if let index = travelData.bucketList.firstIndex(of: currentIndex) {
                             // Remove if already in bucketList
                             travelData.bucketList.remove(at: index)
-
+                            
                             // Show pop-up for "Removed from bucket list"
                             withAnimation {
                                 showPopup = true
                             }
-
+                            
                             // Hide pop-up after 2 seconds
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 withAnimation {
@@ -50,7 +63,7 @@ struct DetailPage: View {
                         } else {
                             // Add to bucketList if not already present
                             travelData.bucketList.append(currentIndex)
-
+                            
                             // Show the alert when the action is performed
                             showAlert = true
                         }
@@ -59,14 +72,17 @@ struct DetailPage: View {
                             .font(.title)
                             .foregroundColor(travelData.bucketList.contains(currentIndex) ? Color("myEmerald") : Color("myBrown"))
                     }
-                    .padding(.top, 15)
+                    //.padding(.top, 10)
                     .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("Successfully added to your bucket list"),
                             dismissButton: .default(Text("Continue"))
                         )
                     }
+                    
                 }
+                .padding(.top, 10)
+                .padding(.bottom, 10)
 
                 GeometryReader { geometry in
                     ZStack {
@@ -97,24 +113,6 @@ struct DetailPage: View {
                                 .cornerRadius(15)
                             }
                             .offset(y: 280)
-
-                            HStack {
-                                Spacer()
-
-                                NavigationLink(
-                                    destination: GuideView(
-                                        locationName: locationName,
-                                        currentIndex: currentIndex
-                                    )
-                                ) {
-                                    Image(systemName: "book")
-                                        .font(.title)
-                                        .foregroundColor(Color("myBrown"))
-                                        .padding(.trailing)
-                                }
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            }
-                            .offset(y: 290)
                         }
 
                         HStack {

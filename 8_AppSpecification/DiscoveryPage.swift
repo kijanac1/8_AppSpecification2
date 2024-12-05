@@ -12,6 +12,7 @@ struct DiscoveryPage: View {
     @State private var navigateToCustomLocation = false
     @State private var navigateToDetailPage = false
     @State private var selectedLocation: String? = nil
+    @State private var showPopup = false
 
 
     var filteredLocations: [String] {
@@ -167,20 +168,75 @@ struct DiscoveryPage: View {
                                         .padding(.top, 120)
                                     }
                                     .padding(.top, -50)
-                                    Button(action: {
-                                        // No action
-                                    }) {
-                                        ZStack {
-                                            Rectangle()
-                                                .fill(Color("myBrown"))
-                                                .cornerRadius(10)
-                                                .frame(width: 275, height: 40)
-                                            Text("Next Destination")
-                                                .foregroundColor(.white)
-                                                .bold()
+                                    HStack {
+                                        
+                                        Spacer()
+                                        // Rewind Button
+                                        Button(action: {
+                                            // nothing
+                                            }
+                                        ) {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color("myBrown"))
+                                                    .frame(width: 60, height: 60)
+                                                Image(systemName: "arrow.left")
+                                                    .font(.title)
+                                                    .foregroundColor(.white)
+                                                    .fontWeight(.bold)
+                                            }
                                         }
+
+                                        Spacer()
+                                        // Add to Bucket List Button
+                                        Button(action: {
+                                            if let locationIndex = travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex]) {
+                                                if travelData.bucketList.contains(locationIndex) {
+                                                    // Remove from bucket list if already present
+                                                } else {
+                                                    // Add to bucket list if not present
+                                                }
+                                            }
+                                        }) {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
+                                                            .flatMap { travelData.bucketList.contains($0) } == true
+                                                          ? Color("myTeal") // Filled color if in bucket list
+                                                          : Color.gray.opacity(0.3)) // Pale color if not in bucket list
+                                                    .frame(width: 60, height: 60)
+
+                                                Image(systemName: "airplane")
+                                                    .font(.title)
+                                                    .foregroundColor(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
+                                                            .flatMap { travelData.bucketList.contains($0) } == true
+                                                          ? .white // Filled color if in bucket list
+                                                          : .gray) // Pale color if not in bucket list
+                                                    .fontWeight(.bold)
+                                            }
+                                        }
+                                            
+                                        Spacer()
+
+                                        // Skip Button
+                                        Button(action: {
+                                            // nothing
+                                            }
+                                        ) {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color("myEmerald"))
+                                                    .frame(width: 60, height: 60)
+                                                Image(systemName: "arrow.uturn.forward")
+                                                    .font(.title)
+                                                    .foregroundColor(.white)
+                                                    .fontWeight(.bold)
+                                            }
+                                        }
+                                        Spacer()
                                     }
-                                    .padding(.bottom, 95)
+                                    .padding(.bottom, 80)
+                                    //.padding(.bottom, 95)
                                 }
                             }
                             
@@ -250,35 +306,98 @@ struct DiscoveryPage: View {
                                     }
                                     .padding(.top, -50)
                                     
-                                    Button(action: {
-                                        withAnimation(.easeOut(duration: 0.3)) {
-                                            swipeOffset = -UIScreen.main.bounds.width
-                                        }
+                                    HStack {
                                         
-                                        print(currentIndex)
-                                        
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                            // Use filteredByFilters.count when filters are applied
-                                            let totalCount = filteredByFilters.isEmpty ? travelData.locationImages.count : filteredByFilters.count
-                                            currentIndex = (currentIndex + 1) % totalCount
-                                            swipeOffset = UIScreen.main.bounds.width
-                                            withAnimation(.easeOut(duration: 0.1)) {
-                                                swipeOffset = 0
+                                        Spacer()
+                                        // Rewind Button
+                                        Button(action: {
+                                            withAnimation(.easeOut(duration: 0.25)) {
+                                                swipeOffset = -UIScreen.main.bounds.width // Swipe left
+                                            }
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                                let totalCount = filteredByFilters.isEmpty ? travelData.locationImages.count : filteredByFilters.count
+                                                currentIndex = (currentIndex + 1) % totalCount
+                                                swipeOffset = 0 // Reset position
+                                            }
+                                        }) {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color("myBrown"))
+                                                    .frame(width: 60, height: 60)
+                                                Image(systemName: "arrow.left")
+                                                    .font(.title)
+                                                    .foregroundColor(.white)
+                                                    .fontWeight(.bold)
                                             }
                                         }
-                                    }) {
-                                        ZStack {
-                                            Rectangle()
-                                                .fill(Color("myBrown"))
-                                                .cornerRadius(10)
-                                                .frame(width: 275, height: 40)
-                                            Text("Next Destination")
-                                                .foregroundColor(.white)
-                                                .bold()
-                                            
+
+                                        Spacer()
+                                        // Add to Bucket List Button
+                                        Button(action: {
+                                            if let locationIndex = travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex]) {
+                                                if travelData.bucketList.contains(locationIndex) {
+                                                    // Remove from bucket list
+                                                    travelData.bucketList.removeAll { $0 == locationIndex }
+                                                } else {
+                                                    // Add to bucket list
+                                                    travelData.bucketList.append(locationIndex)
+                                                    // Show pop-up
+                                                    withAnimation {
+                                                        showPopup = true
+                                                    }
+                                                    // Hide pop-up after 2 seconds
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                        withAnimation {
+                                                            showPopup = false
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }) {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
+                                                        .flatMap { travelData.bucketList.contains($0) } == true
+                                                          ? Color("myTeal") // Filled color if in bucket list
+                                                          : Color.gray.opacity(0.3)) // Pale color if not in bucket list
+                                                    .frame(width: 60, height: 60)
+                                                
+                                                Image(systemName: "airplane")
+                                                    .font(.title)
+                                                    .foregroundColor(travelData.locationNames.firstIndex(of: filteredByFilters[currentIndex])
+                                                        .flatMap { travelData.bucketList.contains($0) } == true
+                                                                     ? .white // Filled color if in bucket list
+                                                                     : .gray) // Pale color if not in bucket list
+                                                    .fontWeight(.bold)
+                                            }
                                         }
+                                            
+                                        Spacer()
+
+                                        // Skip Button
+                                        Button(action: {
+                                            withAnimation(.easeOut(duration: 0.25)) {
+                                                swipeOffset = UIScreen.main.bounds.width // Swipe right
+                                            }
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                                let totalCount = filteredByFilters.isEmpty ? travelData.locationImages.count : filteredByFilters.count
+                                                currentIndex = (currentIndex - 1 + totalCount) % totalCount
+                                                swipeOffset = 0 // Reset position
+                                            }
+                                        }) {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color("myEmerald"))
+                                                    .frame(width: 60, height: 60)
+                                                Image(systemName: "arrow.uturn.forward")
+                                                    .font(.title)
+                                                    .foregroundColor(.white)
+                                                    .fontWeight(.bold)
+                                            }
+                                        }
+                                        Spacer()
                                     }
-                                    .padding(.bottom, 95)
+                                    .padding(.bottom, 80)
                                 }
                             }
                             .offset(x: swipeOffset) // Apply offset to the entire ZStack
@@ -316,7 +435,13 @@ struct DiscoveryPage: View {
                         }
                     
                     }
-                    
+                    .alert(isPresented: $showPopup) {
+                        Alert(
+                            title: Text("Added to bucketlist"),
+                            message: nil,
+                            dismissButton: nil // No manual dismissal button for auto-fading
+                        )
+                    }
                     
                     
                     // DropdownView
